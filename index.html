@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games</title>
+  <style>
+    :root { --bg: #f6f5f1; --ink: #1c1b19; --mute: #6b675f; --card: #ffffff; --line: #e2dfd6; --accent: #b4441f; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #141412; --ink: #ecebe6; --mute: #9a968c; --card: #1e1d1a; --line: #33312c; --accent: #f08a5d; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    main { max-width: 960px; margin: 0 auto; padding: 48px 16px 64px; }
+    h1 { margin: 0 0 28px; font-size: 32px; letter-spacing: -0.02em; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card { display: block; padding: 20px; background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+            color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+    .card:hover, .card:focus-visible { border-color: var(--accent); transform: translateY(-2px); outline: none; }
+    .card h2 { margin: 0 0 6px; font-size: 19px; }
+    .card p { margin: 0; color: var(--mute); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Games</h1>
+    <div class="grid">
+      <!-- One card per game, newest first. Copy this block, fill it in, keep it above the end marker:
+      <a class="card" href="my-game/">
+        <h2>My Game</h2>
+        <p>One line about the game.</p>
+      </a>
+      -->
+      <!-- games:end -->
+    </div>
+  </main>
+</body>
+</html>
