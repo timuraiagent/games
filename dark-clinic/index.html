@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Night Hatch</title>
+  <link rel="icon" href="data:,">
+  <link rel="preload" href="assets/fonts/PT_Serif-Web-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Caveat-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="frame">
+    <div id="stage" aria-live="polite">
+      <canvas id="layer-bg" width="1672" height="941"></canvas>
+      <canvas id="layer-sprites" width="1672" height="941"></canvas>
+      <canvas id="layer-light" width="1672" height="941"></canvas>
+      <div id="layer-ui"></div>
+      <div id="layer-text"></div>
+      <div id="layer-fade"></div>
+    </div>
+  </div>
+  <div id="too-small" hidden></div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

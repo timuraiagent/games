@@ -1,0 +1,715 @@
+/* Ночной приём — оболочка. Логическая сцена 1672×941, масштаб — transform в stage.js. */
+
+@font-face { font-family: 'PT Serif'; src: url('assets/fonts/PT_Serif-Web-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'PT Serif'; src: url('assets/fonts/PT_Serif-Web-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: block; }
+@font-face { font-family: 'PT Serif'; src: url('assets/fonts/PT_Serif-Web-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'Caveat'; src: url('assets/fonts/Caveat-Variable.ttf') format('truetype'); font-weight: 400 700; font-style: normal; font-display: block; }
+
+:root {
+  --soot: #0b0806;
+  --soot-2: #15100c;
+  --bone: #cbbd9a;
+  --bone-dim: #8f8064;
+  --bone-faint: #5e5442;
+  --ink: #2b1f15;
+  --ink-soft: #4a3a2a;
+  --ink-red: #6e2a1d;
+  --ember: #c88a3e;
+  --paper: #a89878;
+  --serif: 'PT Serif', 'Times New Roman', serif;
+  --hand: 'Caveat', 'PT Serif', cursive;
+  --paper-tex: none;   /* подставляется из kit.js: зернистая бумага */
+  --soot-tex: none;    /* копоть */
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { color: var(--bone); font-family: var(--serif); -webkit-font-smoothing: antialiased; user-select: none; }
+
+#frame { position: fixed; inset: 0; background: #000; }
+#stage {
+  position: absolute; left: 0; top: 0;
+  width: 1672px; height: 941px;
+  transform-origin: 0 0;
+  overflow: hidden;
+  background: var(--soot);
+  font-size: 24px; line-height: 1.45;
+}
+#stage canvas { position: absolute; left: 0; top: 0; width: 1672px; height: 941px; }
+#stage.px canvas { image-rendering: pixelated; }
+#layer-ui, #layer-text, #layer-fade { position: absolute; inset: 0; }
+#layer-ui { pointer-events: none; }
+#layer-ui > * { pointer-events: auto; }
+#layer-text { pointer-events: none; }
+#layer-text > * { pointer-events: auto; }
+#layer-text > .passive { pointer-events: none; }
+#layer-fade { background: #000; opacity: 1; pointer-events: none; transition: opacity 1200ms ease; }
+#layer-fade.blocking { pointer-events: auto; cursor: default; }
+
+#too-small {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: #000; color: #6f6450; font: italic 17px/1.4 var(--serif); letter-spacing: .02em; z-index: 10;
+}
+#too-small[hidden] { display: none; }
+
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: left; }
+button:focus { outline: none; }
+button:focus-visible { outline: 1px dotted var(--bone-faint); outline-offset: 3px; }
+
+/* ── Горячие места ─────────────────────────────────────────── */
+.hotspot {
+  position: absolute; cursor: pointer;
+  border-radius: 6px;
+  background: radial-gradient(closest-side, rgba(230,170,95,0) 0%, rgba(230,170,95,0) 100%);
+  transition: background 700ms ease, box-shadow 700ms ease;
+}
+.hotspot:hover, .hotspot.hover {
+  background: radial-gradient(closest-side, rgba(230,170,95,.10) 0%, rgba(230,170,95,.04) 60%, rgba(230,170,95,0) 100%);
+}
+.hotspot[aria-disabled="true"] { cursor: default; }
+
+#tip {
+  position: absolute; z-index: 30; pointer-events: none;
+  font: italic 22px/1.3 var(--serif); color: var(--bone);
+  text-shadow: 0 0 6px #000, 0 0 14px #000, 0 1px 2px #000;
+  white-space: nowrap; opacity: 0; transition: opacity 350ms ease;
+}
+#tip.on { opacity: .92; }
+#tip small { display: block; font-size: 17px; color: var(--bone-dim); font-style: normal; }
+
+/* ── Бумага и копоть ───────────────────────────────────────── */
+.paper {
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(ellipse at 50% 45%, rgba(255,240,200,.10), rgba(40,25,10,.35) 95%), var(--paper-tex);
+  background-size: auto, 288px 288px;
+  image-rendering: pixelated;
+  box-shadow: 0 10px 30px rgba(0,0,0,.65), inset 0 0 40px rgba(60,38,18,.55), inset 0 0 6px rgba(40,25,10,.6);
+}
+.soot {
+  color: var(--bone);
+  background-color: rgba(12,9,7,.86);
+  background-image: var(--soot-tex);
+  background-size: 192px 192px;
+  image-rendering: pixelated;
+  box-shadow: 0 0 22px 8px rgba(5,3,2,.7);
+}
+
+/* ── Меню действий у горячего места ────────────────────────── */
+.menu {
+  position: absolute; z-index: 35; min-width: 300px; max-width: 420px;
+  padding: 18px 22px 16px; font-size: 22px; line-height: 1.3;
+  opacity: 0; transform: translateY(4px); transition: opacity 450ms ease, transform 450ms ease;
+}
+.menu.on { opacity: 1; transform: none; }
+.menu .menu-title { font-style: italic; color: var(--ink-soft); font-size: 19px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(43,31,21,.25); }
+.menu .menu-desc { font-size: 19px; color: var(--ink-soft); margin: -2px 0 10px; font-style: italic; }
+.act {
+  display: flex; align-items: baseline; gap: 14px; width: 100%;
+  padding: 7px 4px 7px 2px; color: var(--ink);
+  border-bottom: 1px dashed rgba(43,31,21,.18);
+  transition: color 300ms ease, background 300ms ease;
+}
+.act:last-child { border-bottom: 0; }
+.act:hover:not([aria-disabled="true"]) { color: #000; background: rgba(80,50,20,.10); }
+.act .act-label { flex: 1; }
+.act .act-cost { white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; }
+.act .act-cost i {
+  display: inline-block; width: 9px; height: 12px; background: #5a3c18;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  transform: translateY(1px);
+  box-shadow: inset -1px -2px 0 rgba(0,0,0,.25);
+}
+.act .act-cost em { font-style: normal; font-size: 16px; color: var(--ink-soft); margin-left: 3px; }
+.act[aria-disabled="true"] { color: rgba(43,31,21,.48); cursor: default; flex-wrap: wrap; }
+.act[aria-disabled="true"] .act-cost i { background: rgba(90,60,24,.35); }
+.act .act-reason { flex-basis: 100%; font-size: 17px; font-style: italic; color: var(--ink-red); opacity: .85; margin-top: 1px; }
+.soot .act { color: var(--bone); border-bottom-color: rgba(203,189,154,.12); }
+.soot .act:hover:not([aria-disabled="true"]) { color: #efe3c4; background: rgba(200,140,60,.08); }
+.soot .act[aria-disabled="true"] { color: rgba(203,189,154,.4); }
+.soot .act .act-cost i { background: var(--ember); }
+.soot .act .act-cost em { color: var(--bone-dim); }
+.soot .act .act-reason { color: #a7745a; }
+
+/* ── Реплики и повествование ───────────────────────────────── */
+.dialogue {
+  position: absolute; left: 390px; right: 290px; bottom: 26px; z-index: 25;
+  min-height: 118px; padding: 20px 40px 22px;
+  cursor: pointer;
+  opacity: 0; transition: opacity 600ms ease;
+}
+.dialogue.on { opacity: 1; }
+.dialogue .who { font-size: 18px; letter-spacing: .14em; text-transform: uppercase; color: var(--bone-dim); margin-bottom: 4px; }
+.dialogue .line { font-size: 26px; line-height: 1.45; color: var(--bone); }
+.dialogue.narration .line { font-style: italic; color: #b7a989; }
+.dialogue .more {
+  position: absolute; right: 22px; bottom: 12px; font-size: 16px; color: var(--bone-faint); font-style: italic;
+  animation: breathe 3.2s ease-in-out infinite;
+}
+@keyframes breathe { 0%, 100% { opacity: .35; } 50% { opacity: .85; } }
+
+/* ── Листы: правила Лю, записка, календарь ─────────────────── */
+.veil { position: absolute; inset: 0; z-index: 40; background: rgba(0,0,0,.55); opacity: 0; transition: opacity 600ms ease; cursor: pointer; }
+.veil.on { opacity: 1; }
+.sheet {
+  position: absolute; z-index: 41; left: 50%; top: 50%;
+  width: 640px; min-height: 520px; padding: 54px 62px 60px;
+  font-family: var(--hand); font-size: 36px; line-height: 1.32; font-weight: 500;
+  transform: translate(-50%, -48%) rotate(-0.8deg);
+  opacity: 0; transition: opacity 600ms ease, transform 600ms ease;
+}
+.sheet.on { opacity: 1; transform: translate(-50%, -50%) rotate(-0.8deg); }
+.sheet h2 { font: 600 40px/1.15 var(--hand); margin: 0 0 18px; color: var(--ink); }
+.sheet p { margin: 0 0 12px; }
+.sheet .sign { text-align: right; margin-top: 18px; color: var(--ink-soft); }
+.sheet .pin { position: absolute; top: 14px; left: 50%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: #3a2c1e; box-shadow: 0 2px 2px rgba(0,0,0,.6); }
+.sheet .close-hint, .ledger .close-hint {
+  position: absolute; bottom: 14px; right: 26px; font: italic 17px var(--serif); color: var(--ink-soft); opacity: .7;
+}
+
+/* ── Книга приёма ──────────────────────────────────────────── */
+.ledger {
+  position: absolute; z-index: 41; left: 50%; top: 50%; width: 1240px; height: 760px;
+  transform: translate(-50%, -48%); opacity: 0; transition: opacity 600ms ease, transform 600ms ease;
+  display: flex;
+}
+.ledger.on { opacity: 1; transform: translate(-50%, -50%); }
+.ledger .page {
+  position: relative; flex: 1; padding: 56px 46px 60px 56px;
+  font-family: var(--hand); font-size: 30px; line-height: 44px; font-weight: 500;
+  background-image:
+    repeating-linear-gradient(to bottom, transparent 0 43px, rgba(70,45,25,.22) 43px 44px),
+    radial-gradient(ellipse at 50% 45%, rgba(255,240,200,.08), rgba(40,25,10,.35) 95%),
+    var(--paper-tex);
+  background-size: auto, auto, 288px 288px;
+  background-position: 0 100px, 0 0, 0 0;
+}
+.ledger .page.left { box-shadow: inset -40px 0 50px -30px rgba(30,18,8,.75), 0 10px 30px rgba(0,0,0,.6); border-radius: 6px 0 0 6px; }
+.ledger .page.right { box-shadow: inset 40px 0 50px -30px rgba(30,18,8,.75), 0 10px 30px rgba(0,0,0,.6); border-radius: 0 6px 6px 0; }
+.ledger h3 { font: 600 34px/44px var(--hand); margin: 0 0 12px; color: var(--ink); }
+.ledger .row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.6fr; gap: 14px; min-height: 44px; }
+.ledger .row.head { font-size: 22px; font-family: var(--serif); font-style: italic; color: var(--ink-soft); line-height: 44px; }
+.ledger .row .faded { color: rgba(43,31,21,.45); }
+.ledger .empty { color: rgba(43,31,21,.5); font-style: italic; }
+
+/* ── Доска примет ──────────────────────────────────────────── */
+.side {
+  position: absolute; z-index: 15; width: 310px; display: flex; flex-direction: column; gap: 14px;
+  pointer-events: none;
+}
+.side > * { pointer-events: auto; }
+.board {
+  position: relative; width: 100%;
+  padding: 22px 22px 18px; font-size: 20px; line-height: 1.3;
+  transform: rotate(0.4deg);
+}
+.board h4 { margin: 0 0 8px; font: italic 19px var(--serif); color: var(--ink-soft); letter-spacing: .04em; }
+.board ul { list-style: none; margin: 0 0 10px; padding: 0 4px 0 0; font-family: var(--hand); font-size: 24px; line-height: 1.1; font-weight: 500; }
+.board li .lbl { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-soft); font-weight: 400; }
+.board .q-drawer { margin-top: 8px; font-family: var(--hand); font-size: 24px; font-weight: 600; color: var(--ink-red); min-height: 1em; }
+.board .q-opt[aria-disabled="true"] { cursor: default; }
+.board li { padding: 3px 0 3px 18px; position: relative; }
+.board li::before { content: '—'; position: absolute; left: 0; color: var(--ink-soft); }
+.board li.none { color: rgba(43,31,21,.45); padding-left: 0; }
+.board li.none::before { content: none; }
+.board .q { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(43,31,21,.22); }
+.board .q-label { font-size: 18px; color: var(--ink-soft); font-style: italic; margin-bottom: 4px; }
+.board .q-opts { display: flex; gap: 8px; }
+.board .q-opt {
+  flex: 1; text-align: center; padding: 3px 0 4px; font-family: var(--hand); font-size: 28px; font-weight: 600;
+  color: rgba(43,31,21,.55); border-radius: 40% 45% 40% 50% / 50% 40% 55% 45%;
+  transition: color 300ms ease;
+}
+.board .q-opt:hover { color: var(--ink); }
+.board .q-opt.on { color: var(--ink); box-shadow: inset 0 0 0 2px rgba(110,42,29,.75); }
+
+/* ── Лампа ─────────────────────────────────────────────────── */
+.lamp-hint { font-style: italic; }
+
+/* ── Обложка, вечер, конец ─────────────────────────────────── */
+.title-block { position: absolute; left: 0; right: 0; top: 92px; text-align: center; pointer-events: none; }
+.title-block h1 {
+  margin: 0; font: 400 86px/1 var(--serif); letter-spacing: .16em; text-indent: .16em; color: #a8977a;
+  text-shadow: 0 0 30px rgba(0,0,0,.9);
+}
+.title-block .sub { margin-top: 18px; font: italic 22px var(--serif); color: var(--bone-faint); letter-spacing: .06em; }
+.title-menu { position: absolute; left: 0; right: 0; top: 248px; display: flex; justify-content: center; gap: 64px; }
+.title-menu .t-item { font-size: 26px; color: var(--bone-dim); letter-spacing: .08em; padding: 6px 4px; transition: color 500ms ease, text-shadow 500ms ease; }
+.title-menu .t-item:hover { color: var(--bone); text-shadow: 0 0 18px rgba(200,140,60,.35); }
+.title-menu .t-item[aria-disabled="true"] { color: var(--bone-faint); cursor: default; }
+
+.cal-text {
+  position: absolute; z-index: 12; text-align: center; color: var(--ink); pointer-events: none;
+  font-family: var(--serif);
+}
+.cal-text .n { font-size: 23px; letter-spacing: .03em; line-height: 1.2; margin-bottom: 6px; }
+.cal-text .w { font: italic 19px/1.3 var(--serif); color: #3a2a1c; }
+
+.plain-btn {
+  position: absolute; z-index: 18; font-size: 25px; letter-spacing: .06em; color: var(--bone-dim);
+  padding: 10px 6px; transition: color 500ms ease, text-shadow 500ms ease;
+}
+.plain-btn:hover { color: var(--bone); text-shadow: 0 0 18px rgba(200,140,60,.35); }
+.plain-btn .act-cost { margin-left: 10px; }
+.plain-btn .act-cost i { display: inline-block; width: 9px; height: 12px; background: var(--ember); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; margin-left: 3px; }
+
+.end-text { position: absolute; left: 0; right: 0; top: 40%; text-align: center; font: italic 30px/1.6 var(--serif); color: var(--bone-dim); }
+
+/* ── Звук ──────────────────────────────────────────────────── */
+#mute {
+  position: absolute; right: 18px; bottom: 10px; z-index: 50;
+  font: italic 17px var(--serif); color: var(--bone-faint); opacity: .55; padding: 4px 6px;
+  transition: opacity 400ms ease, color 400ms ease;
+}
+#mute:hover { opacity: 1; color: var(--bone-dim); }
+
+/* ── Правила на стене (вечер): текст прямо на нарисованном листе ── */
+.rules-on-wall {
+  position: absolute; z-index: 12; padding: 10px 26px; overflow: hidden;
+  font-family: var(--hand); font-weight: 500; font-size: 38px; line-height: 1.28; color: #2a1c12;
+  text-shadow: 0 0 1px rgba(214,196,150,.45);
+}
+.rules-on-wall h2 { font: 700 46px/1.1 var(--hand); margin: 0 0 22px; }
+.rules-on-wall p { margin: 0 0 16px; }
+.rules-on-wall .sign { text-align: right; margin-top: 24px; color: #4a3a2a; }
+
+/* ── Кнопки экрана (ждать, закрыть окошко) ── */
+.screen-acts { position: absolute; z-index: 16; min-width: 280px; max-width: 360px; padding: 10px 20px 8px; font-size: 22px; line-height: 1.3; }
+
+/* ── Листы и книга, нарисованные художником ── */
+.sheet.sheet-art {
+  font-size: 32px; background-size: 100% 100%; background-repeat: no-repeat; image-rendering: pixelated;
+  box-shadow: none; filter: drop-shadow(0 12px 26px rgba(0,0,0,.7));
+  line-height: 1.28; color: #2a1c12;
+}
+.sheet.sheet-art h2 { font-size: 40px; }
+.sheet.sheet-art p { margin-bottom: 10px; }
+.sheet.sheet-art .close-hint { bottom: -34px; right: 0; color: var(--bone-faint); }
+.ledger.ledger-art {
+  left: 0; top: 0; width: 1672px; height: 941px; transform: scale(.985); display: block;
+  background-size: 1672px 941px; image-rendering: pixelated;
+}
+.ledger.ledger-art.on { transform: none; }
+.ledger-art .lrow {
+  position: absolute; display: grid; grid-template-columns: 1fr; gap: 14px;
+  font-family: var(--hand); font-weight: 500; font-size: 31px; color: #2a1c12; white-space: nowrap; overflow: hidden;
+}
+.ledger-art .lrow.two { grid-template-columns: 150px 1fr; }
+.ledger-art .lrow span { overflow: hidden; text-overflow: ellipsis; }
+.ledger-art .lrow.title { display: block; font-weight: 700; font-size: 34px; }
+.ledger-art .lrow.head { font: italic 20px/52px var(--serif); color: #5a4532; }
+.ledger-art .lrow.empty { display: block; color: rgba(43,31,21,.5); }
+.ledger-art .lrow .faded { color: rgba(43,31,21,.45); }
+.ledger-art .close-hint { position: absolute; right: 150px; bottom: 30px; font: italic 17px var(--serif); color: var(--bone-faint); }
+
+/* ── Реплики посередине (экран окошка: внизу рука на подушке) ── */
+.dialogue[data-place="middle"] { top: 292px; bottom: auto; left: 300px; right: 400px; }
+.dialogue[data-place="high"] { top: 40px; bottom: auto; }
+.dialogue.with-image { padding-left: 170px; }
+.dialogue .d-img { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); max-width: 130px; max-height: 110px; image-rendering: pixelated; filter: drop-shadow(0 3px 6px rgba(0,0,0,.7)); }
+
+/* ── Длинные записки ── */
+.sheet.long { font-size: 28px; line-height: 1.25; }
+.sheet.longer { font-size: 25px; line-height: 1.22; }
+.sheet.long p, .sheet.longer p { margin-bottom: 8px; }
+
+/* ── Книга приёма: текст по линейкам разворота ── */
+.ledger-art .ledger-flow {
+  position: absolute; left: 286px; top: 106px; width: 1250px; height: 680px;
+  column-count: 2; column-gap: 200px; column-fill: auto;
+  font-family: var(--hand); font-weight: 500; font-size: 29px; line-height: 52.3px; color: #2a1c12;
+}
+.ledger-flow h3 { margin: 0; font: 700 31px/52.3px var(--hand); color: #2a1c12; break-after: avoid; }
+.ledger-flow p { margin: 0; break-inside: avoid; }
+.ledger-flow p.empty { color: rgba(43,31,21,.5); }
+.ledger.ledger-plain { width: 1240px; height: 760px; display: block; padding: 50px 60px; }
+.ledger-plain .ledger-flow { column-count: 2; column-gap: 80px; height: 640px; font-family: var(--hand); font-size: 28px; line-height: 1.5; column-fill: auto; }
+.ledger-plain .close-hint { position: absolute; }
+
+/* ── Панель кнопок экрана ── */
+.panel { position: absolute; z-index: 16; width: 330px; padding: 12px 18px 10px; font-size: 21px; line-height: 1.28; }
+.side .panel { position: relative; width: 100%; }
+.panel .panel-title { font: italic 17px var(--serif); color: var(--bone-dim); margin: 2px 0 6px; letter-spacing: .03em; }
+.panel .panel-text { font-size: 20px; color: var(--bone); margin: 0 0 8px; line-height: 1.35; }
+.panel .panel-text.small { font-size: 18px; color: var(--bone-dim); }
+.panel.paper .panel-title { color: var(--ink-soft); }
+.panel.paper .panel-text { color: var(--ink); }
+.panel .act.suggest .act-label { text-decoration: underline; text-decoration-color: rgba(200,140,60,.55); text-underline-offset: 4px; }
+.panel.paper .act.suggest .act-label { text-decoration-color: rgba(110,42,29,.6); }
+
+/* ── Улица во весь экран ── */
+.street-view { position: absolute; inset: 0; z-index: 42; cursor: pointer; opacity: 0; transition: opacity 700ms ease; }
+.street-view.on { opacity: 1; }
+.street-view canvas { position: absolute; inset: 0; width: 1672px; height: 941px; image-rendering: pixelated; }
+.street-caption { position: absolute; left: 260px; right: 260px; bottom: 30px; padding: 18px 34px; font-size: 25px; line-height: 1.4; }
+.street-props { position: absolute; right: 30px; top: 30px; display: flex; flex-direction: column; gap: 14px; width: 300px; }
+.street-prop { padding: 12px; display: flex; gap: 12px; align-items: center; font-size: 18px; line-height: 1.3; }
+.street-prop img { width: 90px; height: auto; image-rendering: pixelated; flex: none; }
+
+/* ── Конец ── */
+.end-card { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 900px; text-align: center; }
+.end-card h1 { font: 400 54px/1.1 var(--serif); letter-spacing: .14em; color: #a8977a; margin: 0 0 40px; }
+.end-card p { font: italic 25px/1.55 var(--serif); color: var(--bone-dim); margin: 0 0 6px; }
+.end-card p:last-of-type { margin-top: 26px; color: var(--bone-faint); }
+.end-card .plain-btn { position: relative; margin-top: 40px; }
+
+/* ── Вечер: зеркало, поднос ── */
+.self-line { position: absolute; z-index: 12; left: 210px; width: 480px; top: 830px; font: italic 20px/1.4 var(--serif); color: var(--bone-dim); text-shadow: 0 0 6px #000; pointer-events: none; }
+.rules-on-wall.dense { font-size: 32px; line-height: 1.22; }
+.rules-on-wall.dense h2 { font-size: 40px; margin-bottom: 14px; }
+.rules-on-wall.dense p { margin-bottom: 10px; }
+.rules-on-wall.denser { font-size: 29px; line-height: 1.2; }
+.rules-on-wall.denser p { margin-bottom: 8px; }
+.rules-on-wall { color: #1e140c; }
+
+/* ── Этап 3: бумага вместо тёмных плашек ── */
+.dialogue.paper { color: var(--ink); }
+.dialogue.paper .who { color: var(--ink-soft); }
+.dialogue.paper .line { color: #22180f; }
+.dialogue.paper.narration .line { color: #3a2a1c; }
+.dialogue.paper .more { color: var(--ink-soft); }
+.panel.paper .act { color: var(--ink); }
+.act .act-warning { flex-basis: 100%; font-size: 17px; font-style: italic; color: #8a2a14; margin-top: 1px; }
+.soot .act .act-warning { color: #d0835a; }
+#stage.playing .panel .act, #stage.playing .menu { visibility: hidden; }
+.side { max-height: 893px; }
+.title-confirm { position: absolute; left: 50%; top: 360px; transform: translateX(-50%); width: 520px; padding: 22px 30px; text-align: center; z-index: 30; }
+.title-confirm p { margin: 0 0 14px; font-size: 22px; }
+.title-confirm .row { display: flex; gap: 40px; justify-content: center; }
+.title-confirm button { font-size: 23px; color: var(--ink); padding: 4px 6px; }
+.title-confirm button:hover { color: #000; }
+/* звук: маленький колокольчик в углу, не надпись */
+#mute { width: 30px; height: 30px; padding: 0; opacity: .5; background: none; }
+#mute canvas { width: 30px; height: 30px; image-rendering: pixelated; display: block; }
+
+/* ── Этап 5: колонка справа никогда не вылезает из кадра ── */
+.side { display: flex; flex-direction: column; gap: 14px; max-height: 893px; }
+.side > .panel { flex: none; }
+.side > .board { flex: 0 1 auto; min-height: 150px; display: flex; flex-direction: column; overflow: hidden; }
+.board .signs { position: relative; flex: 1 1 auto; min-height: 40px; display: flex; flex-direction: column; overflow: hidden; }
+.board .signs ul { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(60,40,20,.45) transparent; margin-bottom: 6px; }
+.board .q, .board .q-drawer, .board h4 { flex: none; }
+.board .more-up { flex: none; height: 20px; line-height: 20px; cursor: pointer;
+  font: italic 15px var(--serif); color: var(--ink-soft); text-align: right; padding-right: 8px;
+  visibility: hidden; border-bottom: 1px dashed rgba(43,31,21,.25); margin-bottom: 4px; }
+.board .more-up.on { visibility: visible; }
+.board li.said { font-family: var(--serif); font-size: 17px; line-height: 1.3; color: #3a2a1c; padding-left: 0; }
+.board li.said::before { content: none; }
+.board li.said .lbl { font-style: normal; font-weight: 700; font-size: 15px; }
+.board li.sep { font: italic 15px var(--serif); color: var(--ink-soft); padding: 6px 0 2px; border-top: 1px solid rgba(43,31,21,.22); margin-top: 4px; }
+.board li.sep::before { content: none; }
+.dialogue .more { animation: none; opacity: .75; }
+.dialogue[data-place="right"] { left: 700px; right: 24px; }
+.chalk { position: absolute; z-index: 5; pointer-events: none; font: 600 25px/1 var(--hand); color: rgba(206,196,170,.55); text-shadow: 0 0 1px rgba(0,0,0,.6); letter-spacing: .02em; }
+.evening-slip { padding: 12px 12px 8px; transform: rotate(-1deg); }
+.evening-slip .panel-text.small { font-size: 16px; line-height: 1.3; color: var(--ink); margin-bottom: 8px; }
+
+/* ── Этап 7 ── */
+/* маленькое окно: подписи не мельче ~12 px на экране */
+#stage.tight .act-reason, #stage.tight .act-warning, #stage.tight .panel-title, #stage.tight .menu-title, #stage.tight .menu-desc,
+#stage.tight .board h4, #stage.tight .board .q-label, #stage.tight .board li .lbl, #stage.tight .board li.said, #stage.tight .board .more-up,
+#stage.tight .panel-text.small, #stage.tight .dialogue .who, #stage.tight .dialogue .more, #stage.tight #tip small, #stage.tight .close-hint,
+#stage.tight .board li.sep, #stage.tight .evening-slip .panel-text.small, #stage.tight .cal-text .w { font-size: 19px !important; }
+#stage.tight .board ul { font-size: 24px !important; }
+/* реплика на экране: кнопки ждут, нажатая — помечена */
+#stage.reading .panel .act:not([aria-disabled="true"]), #stage.reading .menu .act:not([aria-disabled="true"]) { opacity: .62; }
+.act.pending { opacity: 1 !important; box-shadow: inset 3px 0 0 rgba(110,42,29,.75); }
+.act.pending .act-label::after { content: ' …'; }
+/* в снимке без интерфейса — ничего интерфейсного, даже то, что само себе включает видимость */
+#stage.noui #layer-ui, #stage.noui #layer-ui *, #stage.noui #layer-text, #stage.noui #layer-text *, #stage.noui #mute { visibility: hidden !important; }
+.dialogue.two-images { padding-left: 250px; }
+.dialogue .d-img-1 { left: 120px; }
+/* верх списка примет мягко гаснет, без резаной строки; подсветка горячих мест в полутьме не видна поверх темноты */
+.board .signs ul { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 10px); mask-image: linear-gradient(to bottom, transparent 0, #000 10px); }
+#stage.dim .hotspot:hover, #stage.dim .hotspot.hover { background: none; }
+.chalk[data-block] { font-size: 34px; opacity: 0; transition: opacity 600ms; }
+.chalk.suggest { opacity: 1; color: rgba(226,214,180,.7); }
+.chalk[data-block].suggest { opacity: .75; }
+.end-card .roll { list-style: none; margin: 0 auto; padding: 0; max-width: 820px; text-align: left; }
+.end-card .roll li { display: grid; grid-template-columns: 170px 1fr; gap: 18px; padding: 5px 0; border-bottom: 1px solid rgba(203,189,154,.08); font: italic 22px/1.45 var(--serif); color: var(--bone-dim); }
+.end-card .roll li .who { font-style: normal; letter-spacing: .08em; color: #a8977a; text-align: right; }
+.end-card .roll li.plain { grid-template-columns: 1fr; text-align: center; color: var(--bone-faint); }
+
+/* ── Этап 9: всё, по чему игрок решает, — разборчивым шрифтом, тёмными чернилами по светлой бумаге ── */
+/* лист правил на стене вечером: под текстом бумага высветлена, без поворота, почерк — только заголовок и подпись */
+.rules-on-wall {
+  font-family: var(--serif) !important; font-weight: 400; font-size: 27px !important; line-height: 1.4; color: #1c130c;
+  text-shadow: none; transform: none; padding: 26px 34px;
+  background: none; box-shadow: none; border-radius: 0; padding: 0 !important;
+}
+.rules-on-wall h2 { font-family: var(--hand) !important; font-size: 44px !important; color: #1c130c; }
+.rules-on-wall p { margin: 0 0 14px; }
+.rules-on-wall .sign { font-family: var(--hand); }
+/* листы (правила, записка Лю) поверх сцены */
+.sheet, .sheet.sheet-art { font-family: var(--serif) !important; font-weight: 400; font-size: 25px !important; line-height: 1.42; color: #1c130c; }
+.sheet.long, .sheet.longer { font-size: 23px !important; }
+/* под текстом бумага высветлена одним куском: чернила по светлому, пятна рисунка не рвут буквы */
+.sheet .sheet-body { padding: 0; }
+.sheet .sheet-body p { margin-bottom: 10px; }
+.sheet h2, .sheet .sign { font-family: var(--hand); }
+/* книга приёма */
+.ledger-art .ledger-flow, .ledger-plain .ledger-flow { font-family: var(--serif) !important; font-weight: 400; font-size: 22px !important; color: #1c130c; }
+.ledger-flow h3 { font-family: var(--hand) !important; }
+/* доска примет */
+.board ul { font-family: var(--serif) !important; font-size: 18px !important; line-height: 1.35 !important; color: #1c130c; }
+.board li .lbl { font-size: 15px; }
+.board .q-drawer { font-family: var(--serif); font-size: 18px; font-weight: 700; }
+
+/* крупные планы осмотра */
+.closeup-back { z-index: 18; padding: 10px 22px; color: var(--ink); font-size: 23px; }
+.closeup-caption { position: absolute; z-index: 14; left: 380px; right: 380px; bottom: 26px; padding: 14px 26px;
+  font: 400 22px/1.4 var(--serif); color: #1c130c; text-align: center; }
+.ledger-flow p.empty { color: #4a3a2a !important; }
+
+/* лист правил таблицей: строки с воздухом; пара столбцов с тонкой чертой рукой между ними */
+.rule-line { margin: 0 0 10px !important; line-height: 1.4; text-align: left; }
+.rule-pair { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0; margin: 2px 0 12px; text-align: left;
+  background-image: linear-gradient(to bottom, rgba(28,19,12,.55), rgba(28,19,12,.55)); background-size: 2px 100%;
+  background-position: 50% 0; background-repeat: no-repeat; }
+.rule-pair .rp-title { font-family: var(--hand); font-weight: 700; font-size: 1.25em; line-height: 1.2; padding: 0 16px 6px; border-bottom: 1.5px solid rgba(28,19,12,.45); }
+.rule-pair .rp-item { padding: 3px 16px; line-height: 1.35; }
+
+/* вечер: реплики слева над кнопками — лист правил справа ничем не закрыт */
+.dialogue[data-place="evening"] { left: 24px; right: auto; width: 800px; bottom: 150px; }
+
+.rule-list { margin: 0 0 12px; text-align: left; }
+.rule-list .rl-title { font-style: italic; color: #3a2a1c; margin-bottom: 2px; }
+.rule-list .rl-item { padding: 1px 0 1px 26px; line-height: 1.35; position: relative; }
+.rule-list .rl-item::before { content: '—'; position: absolute; left: 6px; color: #5a4532; }
+/* длинный лист не мельчает: листается целыми строками колесом */
+.rules-on-wall { overflow-y: auto !important; scrollbar-width: thin; scrollbar-color: rgba(28,19,12,.4) transparent; }
+.sheet.sheet-rules { max-height: 900px; overflow-y: auto; scrollbar-width: thin; }
+.tray-note { position: absolute; z-index: 12; font: italic 16px/1.35 var(--serif); color: var(--bone-dim); text-shadow: 0 0 6px #000; pointer-events: none; }
+.title-langs { position: absolute; left: 0; right: 0; top: 312px; display: flex; justify-content: center; gap: 14px; font: italic 18px var(--serif); color: var(--bone-faint); }
+.title-langs .lang { color: var(--bone-faint); padding: 2px 4px; transition: color 400ms; }
+.title-langs .lang:hover { color: var(--bone-dim); }
+.title-langs .lang.on { color: var(--bone-dim); text-decoration: underline; text-decoration-color: rgba(200,140,60,.5); text-underline-offset: 5px; }
+
+/* лист плотнее: строки пар ближе, у строк немного воздуха */
+.rules-on-wall { line-height: 1.3 !important; }
+.rules-on-wall h2 { margin: 0 0 10px !important; }
+.rule-line { margin: 0 0 7px !important; line-height: 1.3; }
+.rule-pair { margin: 2px 0 9px; }
+.rule-pair .rp-item { padding: 1px 14px; line-height: 1.28; }
+.rule-pair .rp-title { padding: 0 14px 3px; }
+.rule-list { margin: 0 0 8px; }
+.rule-list .rl-item { line-height: 1.28; }
+/* лист листается — внизу метка, пока не дочитан до конца */
+.rules-on-wall.scrolls::after, .sheet.scrolls::after { content: '⌄'; position: sticky; display: block; bottom: 0; text-align: center; font: 700 30px/1 var(--serif); color: #5a3a20; background: linear-gradient(rgba(234,220,188,0), rgba(234,220,188,.95) 60%); padding-top: 18px; }
+.rules-on-wall.scrolls.at-end::after, .sheet.scrolls.at-end::after { visibility: hidden; }
+
+/* подписи крупных планов не закрывают картинку: у языка — под отверстием, у пульса — наверху слева */
+.closeup-caption[data-where="bottom"] { left: 300px; right: 640px; bottom: 6px; padding: 8px 18px; font-size: 20px; }
+.closeup-caption[data-where="top"] { left: 24px; right: auto; width: 360px; top: 96px; bottom: auto; text-align: left; }
+.sheet.sheet-rules { overflow-y: auto; }
+
+.rules-on-wall h2 { font-size: 36px !important; margin: 0 0 6px !important; }
+.rules-on-wall .rule-line { margin: 0 0 4px !important; line-height: 1.24; }
+.rules-on-wall .rule-pair { margin: 2px 0 6px; }
+.rules-on-wall .rule-pair .rp-item { padding: 0 9px; line-height: 1.22; }
+.rules-on-wall .rule-pair .rp-title { padding: 0 9px 2px; font-size: 1.1em; }
+.rules-on-wall .rule-list { margin: 0 0 5px; }
+.rules-on-wall .rule-list .rl-item { line-height: 1.22; }
+/* лист правил из комнаты — та же плотная схема, что на стене */
+.sheet.sheet-rules h2 { font-size: 34px !important; margin: 0 0 6px !important; }
+.sheet.sheet-rules .rule-line { margin: 0 0 4px !important; line-height: 1.24; }
+.sheet.sheet-rules .rule-pair { margin: 2px 0 6px; }
+.sheet.sheet-rules .rule-pair .rp-item { padding: 0 9px; line-height: 1.22; }
+.sheet.sheet-rules .rule-pair .rp-title { padding: 0 9px 2px; font-size: 1.1em; }
+.sheet.sheet-rules .rule-list { margin: 0 0 5px; }
+.sheet.sheet-rules .rule-list .rl-item { line-height: 1.22; }
+.sheet.sheet-rules .close-hint { display: none; }
+
+/* ── Книга приёма по разворотам (этап 12): две страницы, листается ── */
+.ledger-art .ledger-flow.paged, .ledger-plain .ledger-flow.paged { column-count: auto !important; }
+.ledger-flow.paged .ledger-page { position: absolute; top: 0; width: 525px; height: 100%; overflow: hidden; }
+.ledger-flow.paged .ledger-page.left, .ledger-flow.paged .ledger-page.probe { left: 0; }
+.ledger-flow.paged .ledger-page.right { left: 725px; }
+.ledger-flow.paged .ledger-page.probe { visibility: hidden; }
+.ledger-plain .ledger-flow.paged { position: relative; }
+.ledger-plain .ledger-flow.paged .ledger-page { width: 520px; }
+.ledger-plain .ledger-flow.paged .ledger-page.right { left: 600px; }
+.ledger-turn {
+  position: absolute; bottom: 92px; font: italic 600 26px/1 var(--serif); color: #2a1c12;
+  background: rgba(234,220,188,.92); border: 1px solid rgba(60,40,24,.5); padding: 10px 18px; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.ledger-turn.prev { left: 286px; }
+.ledger-turn.next { left: 1290px; }
+.ledger-turn[hidden] { display: none; }
+.ledger-turn:hover { background: #f0e4c4; }
+.ledger-plain .ledger-turn { bottom: 20px; }
+.ledger-plain .ledger-turn.prev { left: 60px; }
+.ledger-plain .ledger-turn.next { left: auto; right: 60px; }
+
+/* ── Цена читается сразу (этап 12): капли крупнее, число тёмное и жирное; «даром» — словом ── */
+.act .act-cost { gap: 3px; padding: 1px 7px 1px 6px; border-radius: 3px; background: rgba(90,60,24,.13); }
+.act .act-cost:empty { display: none; }
+.act .act-cost i { width: 11px; height: 15px; background: #6a3e10; }
+.act .act-cost em { font: 700 21px/1 var(--serif); color: #2a1608; margin-left: 4px; }
+.act .act-cost.free { background: none; }
+.act .act-cost.free em { font: italic 400 18px/1 var(--serif); color: #4a3a2a; margin-left: 0; }
+.soot .act .act-cost { background: rgba(200,140,60,.14); }
+.soot .act .act-cost em { color: var(--bone); }
+
+/* ── Подпись календаря (этап 12): листок над календарём, читаемый шрифт, ничем не закрыт ── */
+.cal-text.cal-card { padding: 12px 18px 14px; text-align: left; color: #1c130c; box-shadow: 0 6px 18px rgba(0,0,0,.55); }
+.cal-text.cal-card .n { font: 600 23px/1.2 var(--serif); margin-bottom: 6px; color: #1c130c; }
+.cal-text.cal-card .w { font: 400 21px/1.32 var(--serif); font-style: normal; color: #1c130c; }
+#stage.tight .cal-text.cal-card .w { font-size: 22px !important; }
+#stage.tight .cal-text.cal-card .n { font-size: 24px !important; }
+
+/* ── Касса утром: бумажные монеты видны сразу ── */
+.cashbox-note { position: absolute; z-index: 14; padding: 12px 16px; color: #1c130c; font: 400 21px/1.3 var(--serif); box-shadow: 0 6px 18px rgba(0,0,0,.55); }
+.cashbox-note p { margin: 0 0 4px; }
+
+/* ── Ничто не закрывает то, на что смотрят (этап 12) ── */
+/* язык: реплики по нижней планке рамы, подпись — в полосе между рамой и доской */
+.dialogue[data-place="closeup"] { left: 240px; right: 352px; bottom: 6px; top: auto; }
+.closeup-caption[data-where="side"] { left: 1112px; right: auto; width: 214px; top: 110px; bottom: auto; text-align: left; font-size: 21px; padding: 12px 14px; }
+/* пульс: реплики сверху, но не на доске; подпись — ниже них */
+.dialogue[data-place="high"] { right: 352px; }
+.closeup-caption[data-where="top"] { top: 200px; }
+/* подсказка наведения не ложится на читаемую строку */
+#stage:has(.dialogue.on) #tip { visibility: hidden; }
+/* лист из комнаты: поля шире (рваный верх, кнопки) — строки чуть плотнее, чтобы лист 1 вошёл целиком */
+.sheet.sheet-rules .rule-line, .sheet.sheet-rules .rule-list .rl-item, .sheet.sheet-rules .rule-pair .rp-item { line-height: 1.17 !important; }
+.sheet.sheet-rules h2 { margin-bottom: 2px !important; }
+
+/* перечень в конце: причина смерти — отдельной строкой под судьбой */
+.end-card .roll .cause { display: block; font-size: .86em; opacity: .8; margin-top: 2px; }
+
+/* ── Лист правил, этап 13: пары — колонками-стопками, на широком листе две пары рядом; плотнее по высоте ── */
+.rule-pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); column-gap: 26px; margin: 2px 0 4px; }
+.rule-pair { display: grid !important; grid-template-columns: 1fr 1fr; align-items: start; }
+.rule-pair .rp-col { display: flex; flex-direction: column; }
+.rule-pair .rp-col .rp-title { border-bottom: 1.5px solid rgba(28,19,12,.45); }
+.rules-on-wall h2, .sheet.sheet-rules h2 { font-size: 32px !important; margin: 0 0 2px !important; }
+.rules-on-wall .rule-line, .sheet.sheet-rules .rule-line { margin: 0 0 2px !important; line-height: 1.2 !important; }
+.rules-on-wall .rule-pair, .sheet.sheet-rules .rule-pair { margin: 0 0 4px !important; }
+.rules-on-wall .rule-pair .rp-item, .sheet.sheet-rules .rule-pair .rp-item { line-height: 1.16 !important; padding: 0 8px !important; }
+.rules-on-wall .rule-pair .rp-title, .sheet.sheet-rules .rule-pair .rp-title { padding: 0 8px 1px !important; font-size: 1.05em !important; }
+.rules-on-wall .rule-list, .sheet.sheet-rules .rule-list { margin: 0 0 3px !important; }
+.rules-on-wall .rule-list .rl-item, .sheet.sheet-rules .rule-list .rl-item { line-height: 1.12 !important; padding-top: 0; padding-bottom: 0; }
+.rules-on-wall .rule-list .rl-title, .sheet.sheet-rules .rule-list .rl-title { margin-bottom: 0; }
+
+/* ── Этап 14: верхний холст — не свет, а умножение на карту темноты из картин художника ── */
+#layer-light { mix-blend-mode: multiply; }
+
+/* ── Обложка: сохранение на другом языке ── */
+.title-menu .t-note { font: italic 20px/1.3 var(--serif); color: var(--bone-dim); max-width: 420px; margin-top: 4px; }
+
+/* ── Последняя карточка — на развороте книги приёма (этап 15) ── */
+.end-card.on-book { left: 0; top: 0; transform: none; width: 1672px; height: 941px; text-align: left; }
+.end-card.on-book .roll-page { position: absolute; top: 100px; width: 525px; height: 690px; color: #1c130c; }
+.end-card.on-book .roll-page.left { left: 286px; }
+.end-card.on-book .roll-page.right { left: 1011px; }
+.end-card.on-book h1 { font: 700 40px/1.2 var(--hand); letter-spacing: 0; color: #1c130c; margin: 0 0 14px; text-align: left; }
+/* имя — своя колонка ровно той ширины, что нужна самому длинному имени */
+.end-card.on-book .roll { display: grid; grid-template-columns: max-content 1fr; column-gap: 16px; row-gap: 6px; align-items: baseline; }
+.end-card.on-book .roll .who { font: 600 22px/1.3 var(--serif); color: #1c130c; max-width: 220px; }
+.end-card.on-book .roll .what { font: italic 21px/1.3 var(--serif); color: #2a1c12; }
+.end-card.on-book .roll .what.plain { grid-column: 1 / -1; font-style: italic; color: #4a3a2a; margin-top: 8px; }
+.end-card.on-book .roll .cause { display: block; font-size: .9em; color: #5a2a18; margin-top: 1px; }
+.end-card.on-book .roll-again { position: relative; margin-top: 24px; color: #1c130c; font: 600 24px var(--serif); border-bottom: 1px solid rgba(28,19,12,.5); padding: 2px 4px; }
+.end-card.no-book .roll-page { background: #e8dcbc; padding: 20px; }
+/* листок вопроса — той же бумаги, что вечерние записки */
+.title-confirm.slip { color: #1c130c; box-shadow: 0 8px 22px rgba(0,0,0,.6); font-family: var(--serif); }
+.end-card.on-book .title-confirm.slip { position: relative; left: auto; top: 18px; transform: none; width: 460px; }
+
+/* ── Ярлыки листов правил (этап 15): все полученные листы, текущий отмечен ── */
+.sheet-tabs { position: absolute; z-index: 32; display: flex; flex-direction: column; gap: 10px; width: 186px; }
+.sheet-tab { text-align: left; padding: 9px 14px; color: #1c130c; font: 600 21px/1.2 var(--hand); box-shadow: 0 4px 12px rgba(0,0,0,.5); cursor: pointer; opacity: .82; }
+.sheet-tab.on { opacity: 1; transform: translateX(10px); box-shadow: 0 6px 16px rgba(0,0,0,.65); }
+.sheet-tab:hover { opacity: 1; }
+#stage.tight .sheet-tab { font-size: 24px !important; }
+
+/* ── Маленькое окно (1280×620): доска и вечерние записки не мельче читаемого (22 px сцены ≈ 14.5 px экрана) ── */
+#stage.tight .board ul, #stage.tight .board li, #stage.tight .board li.said, #stage.tight .board li .lbl, #stage.tight .board li.said .lbl,
+#stage.tight .board h4, #stage.tight .board .q-label, #stage.tight .board li.sep, #stage.tight .board .more-up,
+#stage.tight .evening-slip, #stage.tight .evening-slip .panel-text, #stage.tight .evening-slip .panel-text.small, #stage.tight .tray-note,
+#stage.tight .panel-text, #stage.tight .panel-text.small { font-size: 22px !important; line-height: 1.25 !important; }
+#stage.tight .board .q-opt { font-size: 24px !important; }
+.ledger-art .ledger-turn { bottom: 52px; }
+.ledger-art .ledger-turn.next { left: 1300px; }
+
+/* ── Подпись при наведении (этап 15): та же бумага, что у других ярлыков, тёмные чернила ── */
+#tip { background: #e6d8b4 !important; color: #1c130c !important; font: 400 21px/1.25 var(--serif) !important; font-style: normal !important;
+  padding: 6px 12px 7px !important; box-shadow: 0 4px 12px rgba(0,0,0,.55) !important; text-shadow: none !important; border-radius: 1px; }
+#tip small { color: #4a3a2a !important; font-style: italic; }
+#stage.tight #tip { font-size: 22px !important; }
+
+.sheet-tabs { z-index: 60; }
+/* перечень — в чистых полях страниц (text_left / text_right, у правой — отступ от плесени), крупнее и темнее */
+.end-card.on-book .roll-page { top: 116px; height: 700px; }
+.end-card.on-book .roll-page.left { left: 290px; width: 510px; }
+.end-card.on-book .roll-page.right { left: 968px; width: 482px; }
+.end-card.on-book .roll .who { font-size: 24px; }
+.end-card.on-book .roll .what { font-size: 23px; color: #1c130c; }
+
+/* ── Этап 17: правило на действии — рукой учителя, тёмными чернилами, не как ошибка ── */
+.act .act-rule { flex-basis: 100%; font: 500 21px/1.2 var(--hand); color: #2a1c12; margin-top: 3px; padding-left: 10px; border-left: 2px solid rgba(42,28,18,.35); }
+.soot .act .act-rule { color: var(--bone); border-left-color: rgba(203,189,154,.4); }
+#stage.tight .act .act-rule { font-size: 23px !important; }
+
+/* ── Этап 17: таблица примет с названиями строк; пустая строка — прочерк от руки; свежие чернила ── */
+.rule-pairs { grid-template-columns: 1fr !important; }
+.rule-chart { display: grid; grid-template-columns: max-content 1fr 1fr; column-gap: 12px; row-gap: 1px; margin: 4px 0 8px; align-items: baseline; text-align: left; }
+.rule-chart .rc-corner { border-bottom: 1.5px solid rgba(28,19,12,.45); }
+.rule-chart .rp-title { font-family: var(--hand); font-weight: 700; font-size: 1.08em; border-bottom: 1.5px solid rgba(28,19,12,.45); padding: 0 6px 1px; }
+.rule-chart .rc-label { font-style: italic; color: #4a3a2a; font-size: .88em; padding-right: 4px; }
+.rule-chart .rp-item { padding: 0 6px; line-height: 1.18; }
+.rule-chart .rp-blank { min-height: 1.1em; }
+.rule-chart .blank-dash { display: inline-block; width: 46px; height: 2px; margin: 0 0 4px 2px; vertical-align: middle;
+  background: repeating-linear-gradient(90deg, rgba(42,28,18,.42) 0 7px, rgba(42,28,18,.18) 7px 9px); transform: rotate(-1.5deg); }
+/* свежие чернила: новая строка темнее и с лёгким отливом, пока лист открыт */
+.fresh, .rule-chart .fresh { color: #0f1a3a !important; text-shadow: 0 0 .5px rgba(15,26,58,.6); }
+.rule-chart .rc-label.fresh { color: #22305a !important; }
+
+/* слова учителя — его рукой, на той же полосе реплик: не голос гостя */
+.dialogue.teacher .line { font: 500 30px/1.3 var(--hand) !important; color: #1c2238; }
+#stage.tight .dialogue.teacher .line { font-size: 32px !important; }
+/* меловая галочка — «на листе новое» (на ярлыке и у листа в комнате) */
+.chalk-tick { display: inline-block; width: 26px; height: 18px; margin-left: 8px; vertical-align: middle;
+  background: linear-gradient(55deg, transparent 46%, rgba(232,224,200,.95) 46% 60%, transparent 60%) 0 6px / 10px 12px no-repeat,
+              linear-gradient(-62deg, transparent 44%, rgba(232,224,200,.95) 44% 56%, transparent 56%) 7px 0 / 18px 18px no-repeat;
+  filter: drop-shadow(0 0 1px rgba(0,0,0,.6)); }
+.sheet-tab .chalk-tick { filter: drop-shadow(0 0 1px rgba(0,0,0,.9)) brightness(.35); }
+#layer-ui > .rules-mark { position: absolute; z-index: 13; pointer-events: none; }
+.rules-mark .corner { position: absolute; right: 0; top: 0; width: 22px; height: 22px; background: linear-gradient(225deg, #efe4c8 50%, transparent 50%); box-shadow: -1px 1px 2px rgba(0,0,0,.4); }
+.rules-mark .chalk-tick { position: absolute; left: -34px; top: -6px; width: 30px; height: 22px; }
+
+.rule-chart { grid-template-columns: 7.4em 1fr 1fr; }
+.rule-chart .blank-dash { width: 54px; height: 3px; background: repeating-linear-gradient(90deg, rgba(42,28,18,.55) 0 8px, rgba(42,28,18,.22) 8px 10px); }
+.rules-on-wall.airy .rule-line, .sheet.airy .rule-line { margin: 0 0 16px !important; line-height: 1.38 !important; }
+.rules-on-wall.airy .rule-chart, .sheet.airy .rule-chart { margin: 14px 0 26px !important; row-gap: 10px !important; }
+.rules-on-wall.airy .rule-chart .rp-item, .sheet.airy .rule-chart .rp-item { line-height: 1.3 !important; }
+.rules-on-wall.airy h2, .sheet.airy h2 { margin-bottom: 18px !important; }
+.rule-chart { grid-template-columns: 6.6em 1fr 1fr; column-gap: 10px; }
+.rule-chart .rc-label { font-size: .82em; }
+
+/* ── Этап 18: меню всегда на сцене и непрозрачно ── */
+.menu { background-color: #d9c9a2 !important; }
+.menu.two-col { max-width: 860px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 26px; }
+.menu.two-col .menu-title, .menu.two-col .menu-desc { grid-column: 1 / -1; }
+.menu.scrolls { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(28,19,12,.4) transparent; }
+.menu.scrolls::after { content: '⌄'; position: sticky; bottom: -16px; display: block; text-align: center; font: 700 28px/1 var(--serif); color: #5a3a20;
+  background: linear-gradient(rgba(217,201,162,0), #d9c9a2 60%); padding-top: 14px; }
+
+/* горячее место, которое сейчас ничего не делает, не подсвечивается */
+.hotspot[aria-disabled="true"] { cursor: default; }
+.hotspot[aria-disabled="true"]:hover, .hotspot[aria-disabled="true"].hover { background: none !important; box-shadow: none !important; outline: none !important; }
+
+/* нажатое место ждёт, пока дочитаются строки: держится выделенным, с меловой галочкой */
+.hotspot.pending { outline: 2px dashed rgba(232,224,200,.7); outline-offset: 2px; }
+.hotspot.pending::after { content: ''; position: absolute; right: -6px; top: -14px; width: 28px; height: 20px;
+  background: linear-gradient(55deg, transparent 46%, rgba(232,224,200,.95) 46% 60%, transparent 60%) 0 6px / 10px 12px no-repeat,
+              linear-gradient(-62deg, transparent 44%, rgba(232,224,200,.95) 44% 56%, transparent 56%) 7px 0 / 18px 18px no-repeat; }
+
+/* ── Этап 19: короткий лист — текст сверху удобного размера ── */
+.rules-on-wall.short, .sheet.sheet-rules.short { justify-content: flex-start !important; }
+.rules-on-wall.short .rule-line, .sheet.sheet-rules.short .rule-line { margin: 0 0 12px !important; line-height: 1.32 !important; }
+.rule-chart .rp-title.fresh { color: #0f1a3a !important; }
+
+/* подсказка «выше — ещё приметы» не налезает на первую строку (в маленьком окне шрифт крупнее) */
+.board .more-up { height: auto !important; min-height: 20px; line-height: 1.2 !important; padding-bottom: 2px; }

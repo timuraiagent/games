@@ -1,0 +1,2410 @@
+{
+ "stage": {
+  "w": 1672,
+  "h": 941
+ },
+ "_comment": "Every asset by group/id. file is relative to game/assets. x,y = top-left on the 1672x941 stage of the background named in 'on'. rects are [x0,y0,x1,y1] on that background. source: codex (job id in game/tools/art/jobs.json) or crop of a refs/ sheet.",
+ "assets": {
+  "bg": {
+   "exam_closed": {
+    "file": "bg/exam_closed.png",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "eye_slot": [
+      744,
+      58,
+      926,
+      122
+     ],
+     "eye_slot_frame": [
+      732,
+      44,
+      938,
+      132
+     ],
+     "grille": [
+      804,
+      140,
+      892,
+      214
+     ],
+     "mirror": [
+      896,
+      147,
+      983,
+      233
+     ],
+     "arm_door": [
+      578,
+      590,
+      816,
+      836
+     ],
+     "arm_hole": [
+      596,
+      608,
+      798,
+      832
+     ],
+     "pillow": [
+      540,
+      822,
+      810,
+      926
+     ],
+     "drawer": [
+      893,
+      694,
+      1304,
+      892
+     ]
+    },
+    "source": "codex:exam_closed (edit of refs/01-exam-device.png)"
+   },
+   "room_night": {
+    "file": "bg/room_night.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "hatch": [
+      410,
+      140,
+      1052,
+      742
+     ],
+     "hatch_paper": [
+      640,
+      262,
+      858,
+      465
+     ],
+     "lamp": [
+      395,
+      595,
+      498,
+      827
+     ],
+     "lamp_glass": [
+      408,
+      595,
+      482,
+      720
+     ],
+     "flame_anchor": [
+      443,
+      707
+     ],
+     "cabinet": [
+      12,
+      118,
+      405,
+      740
+     ],
+     "cabinet_top_row": [
+      35,
+      152,
+      392,
+      250
+     ],
+     "ledger": [
+      1015,
+      748,
+      1502,
+      905
+     ],
+     "paper_sheet": [
+      680,
+      785,
+      950,
+      895
+     ],
+     "scales": [
+      620,
+      655,
+      912,
+      785
+     ],
+     "calendar": [
+      1293,
+      232,
+      1386,
+      382
+     ],
+     "rules_sheet": [
+      1293,
+      393,
+      1378,
+      515
+     ],
+     "stair_door": [
+      1090,
+      205,
+      1268,
+      690
+     ],
+     "tray": [
+      1100,
+      672,
+      1258,
+      738
+     ],
+     "street_door": [
+      1398,
+      150,
+      1652,
+      762
+     ],
+     "seat": [
+      872,
+      425,
+      1062,
+      748
+     ],
+     "_note": "flame_anchor = bottom centre of the flame (wick tip). seat = the stool spot, where a seated sprite stands, feet on its bottom edge. bench / waiting_spot = the low bench by the wall and the box of a figure waiting on it (seated/*_bench).",
+     "bench": [
+      1266,
+      657,
+      1398,
+      741
+     ],
+     "waiting_spot": [
+      1211,
+      436,
+      1464,
+      794
+     ]
+    },
+    "source": "codex:room_night (edit of refs/00-main-screen.png); tray painted out with room_night_notray (props/tray* go there)"
+   },
+   "room_morning": {
+    "file": "bg/room_morning.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "window": [
+      516,
+      175,
+      926,
+      492
+     ],
+     "cash_box": [
+      850,
+      705,
+      1030,
+      892
+     ],
+     "ledger": [
+      1015,
+      748,
+      1500,
+      905
+     ],
+     "note": [
+      1062,
+      698,
+      1122,
+      730
+     ],
+     "tray": [
+      1120,
+      676,
+      1258,
+      738
+     ],
+     "lamp": [
+      395,
+      595,
+      498,
+      827
+     ],
+     "calendar": [
+      1293,
+      232,
+      1386,
+      382
+     ],
+     "rules_sheet": [
+      1293,
+      393,
+      1378,
+      515
+     ],
+     "street_door": [
+      1398,
+      150,
+      1652,
+      762
+     ],
+     "stair_door": [
+      1090,
+      205,
+      1268,
+      690
+     ],
+     "_note": "the window shows an oblique view of the street drawn in the room's own cell (codex:morning_window), baked into the plate; for another street state the game pastes street_variants.<id>.window; (old note:) to show another street variant, the game can paste the current street variant the same way (scale to the window rect, then the morning grade: see morning_view() in game/tools/art/finish.py).",
+     "cash_box_inside": [
+      875,
+      795,
+      1005,
+      850
+     ],
+     "bench": [
+      1266,
+      657,
+      1400,
+      741
+     ]
+    },
+    "source": "codex:room_morning (edit of room_night + refs/10-morning-counter.png); window view replaced by a crop of street_base"
+   },
+   "title": {
+    "file": "bg/title.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "title_area": [
+      0,
+      0,
+      1672,
+      310
+     ]
+    },
+    "source": "codex:title (v2: edit of title v1 + refs/15: river removed, jar with red label, dark top); right corner (jar label, shelf under the rail) from codex:title_fix; stray plank painted out; round 17: forearm from codex:title_fix2, jar corner relit by it; round 16: the top fades into the dark through an irregular blotchy mask (no regular dot screen)"
+   },
+   "scales": {
+    "file": "bg/scales.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "copper_jar": [
+      1478,
+      400,
+      1672,
+      750
+     ],
+     "jar_reflection": [
+      1495,
+      470,
+      1650,
+      720
+     ],
+     "pan_left": [
+      1082,
+      498,
+      1232,
+      535
+     ],
+     "pan_right": [
+      1288,
+      498,
+      1442,
+      535
+     ],
+     "scales": [
+      1080,
+      498,
+      1442,
+      672
+     ],
+     "paper_square": [
+      885,
+      705,
+      1205,
+      882
+     ],
+     "paper_square_quad": [
+      [
+       965,
+       705
+      ],
+      [
+       1205,
+       712
+      ],
+      [
+       1192,
+       880
+      ],
+      [
+       885,
+       862
+      ]
+     ],
+     "poison_jar_place": [
+      400,
+      700,
+      560,
+      850
+     ],
+     "poison_jar_base": [
+      480,
+      836
+     ],
+     "hatch_paper": [
+      1207,
+      113,
+      1507,
+      380
+     ],
+     "lamp": [
+      935,
+      388,
+      1060,
+      645
+     ],
+     "cabinet": [
+      245,
+      85,
+      1005,
+      690
+     ],
+     "cabinet_top_row": [
+      255,
+      118,
+      1000,
+      250
+     ],
+     "_note": "v2 frame (round 4): top row with red labels fully inside; poison_jar_base = bottom centre where a jar_poison_* sprite stands (a faint ring stain marks it)."
+    },
+    "source": "codex:scales (edit of refs/07-cabinet-scales.png); herb jar tag recoloured to dull paper; light of codex:scales_lit2"
+   },
+   "street_base": {
+    "file": "street/street_base.webp",
+    "width": 1672,
+    "height": 941,
+    "source": "codex:street_base (v2: the five frontages inside x 342-1296; style refs/14-street-pair.png)",
+    "rects": {
+     "repair": [
+      342,
+      395,
+      542,
+      768
+     ],
+     "tofu": [
+      540,
+      395,
+      742,
+      768
+     ],
+     "wei_mei_door": [
+      742,
+      395,
+      908,
+      768
+     ],
+     "butcher": [
+      908,
+      395,
+      1108,
+      768
+     ],
+     "neighbour_door": [
+      1112,
+      380,
+      1296,
+      768
+     ],
+     "qian_pharmacy": [
+      1296,
+      60,
+      1650,
+      768
+     ]
+    }
+   },
+   "wall_evening": {
+    "file": "bg/wall_evening.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "calendar": [
+      200,
+      20,
+      712,
+      812
+     ],
+     "calendar_leaf": [
+      205,
+      262,
+      662,
+      748
+     ],
+     "rules_sheet": [
+      862,
+      28,
+      1488,
+      932
+     ],
+     "rules_text_area": [
+      925,
+      110,
+      1425,
+      840
+     ]
+    },
+    "source": "codex:wall_evening (new, style refs/00 + refs/13); lamp fall-off darkening, chunky() 6-px blocks + ordered dither + grime"
+   },
+   "exam_tongue": {
+    "file": "bg/exam_tongue.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "opening": [
+      287,
+      71,
+      1036,
+      863
+     ],
+     "tongue": [
+      301,
+      67,
+      941,
+      867
+     ],
+     "board_area": [
+      1332,
+      0,
+      1672,
+      941
+     ]
+    },
+    "source": "codex:exam_tongue (grille close-up); its opening cleared to black - the grille's own bars are exam_layers/tongue_bars"
+   },
+   "exam_pulse": {
+    "file": "bg/exam_pulse.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "opening": [
+      428,
+      105,
+      945,
+      615
+     ],
+     "pillow": [
+      330,
+      690,
+      1040,
+      860
+     ],
+     "board_area": [
+      1332,
+      0,
+      1672,
+      941
+     ],
+     "arm": [
+      378,
+      218,
+      919,
+      860
+     ],
+     "arm_of": [
+      378,
+      218,
+      919,
+      860
+     ]
+    },
+    "source": "codex:armc_none (the pulse close-up after refs/12 + refs/15, arm removed from armc_warm): round door open, empty pillow"
+   },
+   "room_night_low": {
+    "file": "bg/room_night_low.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "room_night",
+    "note": "interface: ratio = this / room_night, multiplied over the composed scene",
+    "source": "codex:room_night_low (the plate repainted by Codex at the last spoons of oil); delivered as the plate x the painted light ratio (both blurred 5 px) so it is pixel-aligned"
+   },
+   "room_night_out": {
+    "file": "bg/room_night_out.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "room_night",
+    "note": "interface: ratio = this / room_night, multiplied over the composed scene",
+    "source": "codex:room_night_out gave the level (0.20 of full); delivered as the plate x one smooth cool level, so nothing is singled out"
+   },
+   "exam_closed_low": {
+    "file": "bg/exam_closed_low.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "exam_closed",
+    "note": "interface: ratio = this / exam_closed, multiplied over the composed scene",
+    "source": "codex:exam_closed_low (the plate repainted by Codex at the last spoons of oil); delivered as the plate x the painted light ratio (both blurred 5 px) so it is pixel-aligned"
+   },
+   "exam_closed_out": {
+    "file": "bg/exam_closed_out.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "exam_closed",
+    "note": "interface: ratio = this / exam_closed, multiplied over the composed scene",
+    "source": "codex:exam_closed_out gave the level (0.20 of full); delivered as the plate x one smooth cool level, so nothing is singled out"
+   },
+   "scales_low": {
+    "file": "bg/scales_low.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "scales",
+    "note": "interface: ratio = this / scales, multiplied over the composed scene",
+    "source": "codex:scales_low (the plate repainted by Codex at the last spoons of oil); delivered as the plate x the painted light ratio (both blurred 5 px) so it is pixel-aligned"
+   },
+   "scales_out": {
+    "file": "bg/scales_out.webp",
+    "width": 1672,
+    "height": 941,
+    "aligned_with": "scales",
+    "note": "interface: ratio = this / scales, multiplied over the composed scene",
+    "source": "codex:scales_out gave the level (0.20 of full); delivered as the plate x one smooth cool level, so nothing is singled out"
+   },
+   "room_tongue": {
+    "file": "bg/room_tongue.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "tongue": [
+      301,
+      67,
+      941,
+      867
+     ],
+     "board_area": [
+      1332,
+      0,
+      1672,
+      941
+     ]
+    },
+    "source": "codex:room_tongue (guest inside: dark room behind the face, lamp at the left; the tongue goes in the dark middle)"
+   },
+   "room_pulse": {
+    "file": "bg/room_pulse.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "arm": [
+      378,
+      218,
+      919,
+      860
+     ],
+     "pillow": [
+      320,
+      648,
+      1040,
+      840
+     ],
+     "board_area": [
+      1332,
+      0,
+      1672,
+      941
+     ]
+    },
+    "source": "codex:room_pulse2 (guest inside: the counter close, the pillow, the lamp; behind it the dim sleeve, knee and coat of the seated guest)"
+   }
+  },
+  "street_variants": {
+   "street_base": {
+    "file": "street/street_base.webp",
+    "width": 1672,
+    "height": 941,
+    "source": "codex:street_base (v2: the five frontages inside x 342-1296; style refs/14-street-pair.png)",
+    "rects": {
+     "repair": [
+      342,
+      395,
+      542,
+      768
+     ],
+     "tofu": [
+      540,
+      395,
+      742,
+      768
+     ],
+     "wei_mei_door": [
+      742,
+      395,
+      908,
+      768
+     ],
+     "butcher": [
+      908,
+      395,
+      1108,
+      768
+     ],
+     "neighbour_door": [
+      1112,
+      380,
+      1296,
+      768
+     ],
+     "qian_pharmacy": [
+      1296,
+      60,
+      1650,
+      768
+     ]
+    },
+    "window": {
+     "file": "street/window/street_base.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:morning_window; the model's own brushwork, no regrid"
+    }
+   },
+   "street_rain": {
+    "file": "street/street_rain.webp",
+    "width": 1672,
+    "height": 941,
+    "changed": [
+     40,
+     755,
+     1650,
+     941
+    ],
+    "source": "codex:street_rain (edit of street_base); only [40, 755, 1650, 941] pasted onto street_base, feathered",
+    "window": {
+     "file": "street/window/street_rain.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:win_rain; the model's own brushwork, no regrid"
+    }
+   },
+   "street_tofu_closed": {
+    "file": "street/street_tofu_closed.webp",
+    "width": 1672,
+    "height": 941,
+    "changed": [
+     540,
+     395,
+     742,
+     768
+    ],
+    "source": "codex:street_tofu_closed (edit of street_base); only [540, 395, 742, 768] pasted onto street_base, feathered",
+    "window": {
+     "file": "street/window/street_tofu_closed.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:win_tofu_closed; the model's own brushwork, no regrid"
+    }
+   },
+   "street_repair_closed": {
+    "file": "street/street_repair_closed.webp",
+    "width": 1672,
+    "height": 941,
+    "changed": [
+     342,
+     395,
+     542,
+     768
+    ],
+    "source": "codex:street_repair_closed (edit of street_base); only [342, 395, 542, 768] pasted onto street_base, feathered",
+    "window": {
+     "file": "street/window/street_repair_closed.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:win_repair_closed; the model's own brushwork, no regrid"
+    }
+   },
+   "street_butcher_closed": {
+    "file": "street/street_butcher_closed.webp",
+    "width": 1672,
+    "height": 941,
+    "changed": [
+     908,
+     395,
+     1108,
+     768
+    ],
+    "source": "codex:street_butcher_closed (edit of street_base); only [908, 395, 1108, 768] pasted onto street_base, feathered",
+    "window": {
+     "file": "street/window/street_butcher_closed.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:win_butcher_closed; the model's own brushwork, no regrid"
+    }
+   },
+   "street_mourning_extra": {
+    "file": "street/street_mourning_extra.webp",
+    "width": 1672,
+    "height": 941,
+    "changed": [
+     1112,
+     380,
+     1296,
+     768
+    ],
+    "source": "codex:street_mourning_extra (edit of street_base); only [1112, 380, 1296, 768] pasted onto street_base, feathered",
+    "window": {
+     "file": "street/window/street_mourning_extra.png",
+     "width": 410,
+     "height": 317,
+     "on": "room_morning",
+     "x": 516,
+     "y": 175,
+     "source": "codex:morning_window (oblique view drawn inside the morning room) + only the changed region of codex:win_mourning_extra; the model's own brushwork, no regrid"
+    }
+   }
+  },
+  "arms": {
+   "warm": {
+    "file": "arms/warm.png",
+    "width": 239,
+    "height": 244,
+    "on": "exam_closed",
+    "x": 535,
+    "y": 659,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_warm (edit of exam_open), diff cut against exam_open"
+   },
+   "sweaty": {
+    "file": "arms/sweaty.png",
+    "width": 240,
+    "height": 246,
+    "on": "exam_closed",
+    "x": 534,
+    "y": 657,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_sweaty (edit of arm_warm), diff cut against exam_open"
+   },
+   "old": {
+    "file": "arms/old.png",
+    "width": 239,
+    "height": 246,
+    "on": "exam_closed",
+    "x": 534,
+    "y": 658,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_old (edit of arm_warm), diff cut against exam_open"
+   },
+   "wet": {
+    "file": "arms/wet.png",
+    "width": 246,
+    "height": 276,
+    "on": "exam_closed",
+    "x": 534,
+    "y": 644,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_wet (edit of arm_warm), diff cut against exam_open"
+   },
+   "grey_blue": {
+    "file": "arms/grey_blue.png",
+    "width": 238,
+    "height": 244,
+    "on": "exam_closed",
+    "x": 536,
+    "y": 660,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_grey_blue (edit of arm_warm), diff cut against exam_open"
+   },
+   "earth": {
+    "file": "arms/earth.png",
+    "width": 242,
+    "height": 255,
+    "on": "exam_closed",
+    "x": 534,
+    "y": 648,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_earth (edit of arm_warm), diff cut against exam_open; graded to flat yellow-grey wax; dark earth rim painted at the fingertips"
+   },
+   "porcelain": {
+    "file": "arms/porcelain.png",
+    "width": 244,
+    "height": 257,
+    "on": "exam_closed",
+    "x": 534,
+    "y": 646,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:arm_porcelain (edit of arm_warm), diff cut against exam_open"
+   }
+  },
+  "props": {
+   "jar_poison_3": {
+    "file": "props/jar_poison_3.png",
+    "width": 227,
+    "height": 263,
+    "source": "codex:props_jars (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "jar_poison_2": {
+    "file": "props/jar_poison_2.png",
+    "width": 226,
+    "height": 263,
+    "source": "codex:props_jars (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "jar_poison_1": {
+    "file": "props/jar_poison_1.png",
+    "width": 226,
+    "height": 263,
+    "source": "codex:props_jars (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "jar_poison_0": {
+    "file": "props/jar_poison_0.png",
+    "width": 226,
+    "height": 263,
+    "source": "codex:props_jars (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "herb_out_cold": {
+    "file": "props/herb_out_cold.png",
+    "width": 183,
+    "height": 225,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "herb_out_heat": {
+    "file": "props/herb_out_heat.png",
+    "width": 180,
+    "height": 226,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "herb_in_cold": {
+    "file": "props/herb_in_cold.png",
+    "width": 209,
+    "height": 159,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "herb_in_heat": {
+    "file": "props/herb_in_heat.png",
+    "width": 213,
+    "height": 152,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "packet": {
+    "file": "props/packet.png",
+    "width": 222,
+    "height": 187,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "vial": {
+    "file": "props/vial.png",
+    "width": 117,
+    "height": 216,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "cup": {
+    "file": "props/cup.png",
+    "width": 210,
+    "height": 181,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "pillow": {
+    "file": "props/pillow.png",
+    "width": 236,
+    "height": 142,
+    "source": "codex:props_herbs (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "coin": {
+    "file": "props/coin.png",
+    "width": 189,
+    "height": 190,
+    "source": "codex:props_money (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "coins": {
+    "file": "props/coins.png",
+    "width": 269,
+    "height": 168,
+    "source": "codex:props_money (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "paper_money": {
+    "file": "props/paper_money.png",
+    "width": 219,
+    "height": 213,
+    "source": "codex:props_money (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "cashbox": {
+    "file": "props/cashbox.png",
+    "width": 243,
+    "height": 230,
+    "source": "codex:props_money (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "key": {
+    "file": "props/key.png",
+    "width": 258,
+    "height": 188,
+    "source": "codex:props_money (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "note": {
+    "file": "props/note.png",
+    "width": 327,
+    "height": 287,
+    "source": "codex:props_paper (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "rules_sheet": {
+    "file": "props/rules_sheet.png",
+    "width": 309,
+    "height": 393,
+    "source": "codex:props_paper (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "receipt": {
+    "file": "props/receipt.png",
+    "width": 337,
+    "height": 283,
+    "source": "codex:props_paper (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "cal_quiet": {
+    "file": "props/cal_quiet.png",
+    "width": 283,
+    "height": 424,
+    "source": "codex:props_cal (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "cal_rain": {
+    "file": "props/cal_rain.png",
+    "width": 283,
+    "height": 424,
+    "source": "codex:props_cal (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "cal_wind": {
+    "file": "props/cal_wind.png",
+    "width": 284,
+    "height": 424,
+    "source": "codex:props_cal (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "seal": {
+    "file": "props/seal.png",
+    "width": 228,
+    "height": 84,
+    "on": "room_night",
+    "x": 40,
+    "y": 224,
+    "note": "two seal strips across the top-row drawers, below the red labels",
+    "scales": {
+     "file": "props/seal_scales.png",
+     "width": 334,
+     "height": 69,
+     "on": "scales",
+     "x": 328,
+     "y": 203,
+     "source": "codex:scales_seal (two aged paper strips with a red stamp painted into scales), cut as the difference, toned down"
+    },
+    "source": "codex:inroom_seal (two aged paper strips with a red stamp painted into room_night), cut as the difference, toned down; graded (0.76, 0.92)"
+   },
+   "bottle_liu": {
+    "file": "props/bottle_liu.png",
+    "width": 230,
+    "height": 278,
+    "source": "codex:props_bottle (glass desaturated to olive-brown, highlights lowered, amber oil kept) (sheet), keyed; graded (0.76, 0.92)"
+   },
+   "bowl_one": {
+    "file": "props/bowl_one.png",
+    "width": 152,
+    "height": 322,
+    "on": "street_base",
+    "x": 752,
+    "y": 440,
+    "note": "draw at x,y on any street_* frame: the open door with the table inside",
+    "source": "codex:street_cups1 (the door half open and the table with the cup(s) painted into street_base), rect cut; graded (0.76, 0.92)"
+   },
+   "bowl_two": {
+    "file": "props/bowl_two.png",
+    "width": 152,
+    "height": 322,
+    "on": "street_base",
+    "x": 752,
+    "y": 440,
+    "note": "draw at x,y on any street_* frame: the open door with the table inside",
+    "source": "codex:street_cups2 (the door half open and the table with the cup(s) painted into street_base), rect cut; graded (0.76, 0.92)"
+   },
+   "ledger_open": {
+    "file": "props/ledger_open.webp",
+    "width": 1672,
+    "height": 941,
+    "rects": {
+     "page_left": [
+      150,
+      40,
+      822,
+      862
+     ],
+     "page_right": [
+      850,
+      40,
+      1562,
+      862
+     ],
+     "text_left": [
+      290,
+      120,
+      800,
+      820
+     ],
+     "text_right": [
+      968,
+      120,
+      1530,
+      820
+     ]
+    },
+    "source": "codex:ledger_open (full frame); red drip covered with neighbouring page; graded (0.76, 0.92)"
+   },
+   "cinnabar_trace": {
+    "file": "props/cinnabar_trace.png",
+    "width": 268,
+    "height": 87,
+    "on": "room_morning",
+    "x": 1388,
+    "y": 725,
+    "source": "codex:cinnabar (edit of room_morning), diff cut"
+   },
+   "tray": {
+    "file": "props/tray.png",
+    "width": 184,
+    "height": 69,
+    "on": "room_night",
+    "x": 1089,
+    "y": 672,
+    "note": "replace each other: tray (night 1), tray_n2 (night 2), tray_gone (night 3)",
+    "source": "codex:room_night (edit of room_night), cut against room_night_notray; graded (0.76, 0.92)",
+    "morning": {
+     "file": "props/tray_morning.png",
+     "width": 145,
+     "height": 61,
+     "on": "room_morning",
+     "x": 1120,
+     "y": 680,
+     "source": "the night layer re-lit to the morning tray's colour and scaled to its size"
+    }
+   },
+   "tray_n2": {
+    "file": "props/tray_n2.png",
+    "width": 184,
+    "height": 75,
+    "on": "room_night",
+    "x": 1089,
+    "y": 666,
+    "note": "replace each other: tray (night 1), tray_n2 (night 2), tray_gone (night 3)",
+    "source": "codex:room_night_tray2 (edit of room_night), cut against room_night_notray; left bowl dulled; graded (0.76, 0.92)",
+    "morning": {
+     "file": "props/tray_n2_morning.png",
+     "width": 146,
+     "height": 66,
+     "on": "room_morning",
+     "x": 1119,
+     "y": 676,
+     "source": "the night layer re-lit to the morning tray's colour and scaled to its size"
+    }
+   },
+   "tray_gone": {
+    "file": "props/tray_gone.png",
+    "width": 187,
+    "height": 74,
+    "on": "room_night",
+    "x": 1087,
+    "y": 670,
+    "note": "replace each other: tray (night 1), tray_n2 (night 2), tray_gone (night 3)",
+    "source": "codex:room_night_traygone (edit of room_night), cut against room_night_notray; inside of the ring lightened; graded (0.76, 0.92)",
+    "morning": {
+     "file": "props/tray_gone_morning.png",
+     "width": 145,
+     "height": 54,
+     "on": "room_morning",
+     "x": 1120,
+     "y": 688,
+     "source": "the night layer re-lit to the morning tray's colour and scaled to its size"
+    }
+   },
+   "stool_earth": {
+    "file": "props/stool_earth.png",
+    "width": 403,
+    "height": 498,
+    "on": "room_night",
+    "x": 696,
+    "y": 276,
+    "note": "same rect as seated/wei: swap one for the other",
+    "source": "codex:inroom_stool_earth (painted into room_night from the inroom_wei painting, the man removed), cut as the difference from the plate with a soft mask; raw difference, no filter"
+   },
+   "bench": {
+    "file": "props/bench.png",
+    "width": 132,
+    "height": 84,
+    "on": "room_night",
+    "x": 1266,
+    "y": 657,
+    "note": "also baked into room_morning at the same place",
+    "source": "codex:props_bench (ends joined to a short bench), keyed, 3-px blocks, dimmed"
+   },
+   "flame_1": {
+    "file": "props/flame_1.png",
+    "width": 64,
+    "height": 120,
+    "on": "room_night",
+    "x": 403,
+    "y": 599,
+    "base": [
+     40,
+     108
+    ],
+    "note": "bottom centre on room_night flame_anchor; additive or normal blend",
+    "source": "codex:props_flames2 (flame with a wisp of smoke), alpha from brightness, core on the wick"
+   },
+   "flame_low_1": {
+    "file": "props/flame_low_1.png",
+    "width": 8,
+    "height": 12,
+    "on": "room_night",
+    "x": 439,
+    "y": 696,
+    "base": [
+     4,
+     11
+    ],
+    "note": "low oil: same wick point as flame_*; the lean of each frame is +-1 px",
+    "source": "props_flames frame 1 shrunk to a few pixels, dull orange, 80% alpha (low oil); graded (0.76, 0.92)"
+   },
+   "flame_2": {
+    "file": "props/flame_2.png",
+    "width": 47,
+    "height": 114,
+    "on": "room_night",
+    "x": 421,
+    "y": 610,
+    "base": [
+     22,
+     97
+    ],
+    "note": "bottom centre on room_night flame_anchor; additive or normal blend",
+    "source": "codex:props_flames2 (flame with a wisp of smoke), alpha from brightness, core on the wick"
+   },
+   "flame_low_2": {
+    "file": "props/flame_low_2.png",
+    "width": 9,
+    "height": 15,
+    "on": "room_night",
+    "x": 439,
+    "y": 693,
+    "base": [
+     4,
+     14
+    ],
+    "note": "low oil: same wick point as flame_*; the lean of each frame is +-1 px",
+    "source": "props_flames frame 2 shrunk to a few pixels, dull orange, 80% alpha (low oil); graded (0.76, 0.92)"
+   },
+   "flame_3": {
+    "file": "props/flame_3.png",
+    "width": 58,
+    "height": 118,
+    "on": "room_night",
+    "x": 423,
+    "y": 602,
+    "base": [
+     20,
+     105
+    ],
+    "note": "bottom centre on room_night flame_anchor; additive or normal blend",
+    "source": "codex:props_flames2 (flame with a wisp of smoke), alpha from brightness, core on the wick"
+   },
+   "flame_low_3": {
+    "file": "props/flame_low_3.png",
+    "width": 7,
+    "height": 10,
+    "on": "room_night",
+    "x": 440,
+    "y": 698,
+    "base": [
+     3,
+     9
+    ],
+    "note": "low oil: same wick point as flame_*; the lean of each frame is +-1 px",
+    "source": "props_flames frame 3 shrunk to a few pixels, dull orange, 80% alpha (low oil); graded (0.76, 0.92)"
+   },
+   "body_mat": {
+    "file": "props/body_mat.png",
+    "width": 1547,
+    "height": 248,
+    "on": "room_night",
+    "x": 125,
+    "y": 556,
+    "note": "drawn when the engine reports bodyAtWall",
+    "source": "codex:body_mat (a body under a straw mat painted into room_night by the wall), raw difference, soft mask; graded (0.76, 0.92)"
+   }
+  },
+  "seated": {
+   "man": {
+    "file": "seated/man.png",
+    "width": 314,
+    "height": 409,
+    "on": "room_night",
+    "x": 786,
+    "y": 365,
+    "source": "codex:inroom2_man (painted into the lit room_night behind the counter at refs/11's scale), raw difference with a soft mask, no filter"
+   },
+   "woman": {
+    "file": "seated/woman.png",
+    "width": 397,
+    "height": 385,
+    "on": "room_night",
+    "x": 704,
+    "y": 389,
+    "source": "codex:inroom2_woman (painted into the lit room_night behind the counter at refs/11's scale), raw difference with a soft mask, no filter"
+   },
+   "old_woman": {
+    "file": "seated/old_woman.png",
+    "width": 287,
+    "height": 391,
+    "on": "room_night",
+    "x": 812,
+    "y": 376,
+    "source": "codex:inroom2_old_woman (painted into the lit room_night behind the counter at refs/11's scale), raw difference with a soft mask, no filter"
+   },
+   "wei": {
+    "file": "seated/wei.png",
+    "width": 403,
+    "height": 498,
+    "on": "room_night",
+    "x": 696,
+    "y": 276,
+    "source": "codex:inroom_wei (painted into room_night), cut as the difference from the plate with a soft mask; raw difference, no filter"
+   },
+   "mei": {
+    "file": "seated/mei.png",
+    "width": 246,
+    "height": 363,
+    "on": "room_night",
+    "x": 840,
+    "y": 411,
+    "source": "codex:inroom2_mei (painted into the lit room_night behind the counter at refs/11's scale), raw difference with a soft mask, no filter"
+   },
+   "man_bench": {
+    "file": "seated/man_bench.png",
+    "width": 132,
+    "height": 234,
+    "on": "room_night",
+    "x": 1267,
+    "y": 520,
+    "note": "sits on props/bench; draw after the bench",
+    "source": "codex:seated_bench (seated v4 redrawn without stools), keyed, x0.78 of the stool figures, nearest-scaled, opaque, no outline"
+   },
+   "woman_bench": {
+    "file": "seated/woman_bench.png",
+    "width": 103,
+    "height": 264,
+    "on": "room_night",
+    "x": 1282,
+    "y": 501,
+    "note": "sits on props/bench; draw after the bench",
+    "source": "codex:seated_bench (seated v4 redrawn without stools), keyed, x0.78 of the stool figures, nearest-scaled, opaque, no outline"
+   },
+   "old_woman_bench": {
+    "file": "seated/old_woman_bench.png",
+    "width": 103,
+    "height": 210,
+    "on": "room_night",
+    "x": 1282,
+    "y": 535,
+    "note": "sits on props/bench; draw after the bench",
+    "source": "codex:seated_bench (seated v4 redrawn without stools), keyed, x0.78 of the stool figures, nearest-scaled, opaque, no outline"
+   },
+   "wei_bench": {
+    "file": "seated/wei_bench.png",
+    "width": 116,
+    "height": 269,
+    "on": "room_night",
+    "x": 1275,
+    "y": 498,
+    "note": "sits on props/bench; draw after the bench",
+    "source": "codex:seated_bench (seated v4 redrawn without stools), keyed, x0.78 of the stool figures, nearest-scaled, opaque, no outline"
+   },
+   "mei_bench": {
+    "file": "seated/mei_bench.png",
+    "width": 253,
+    "height": 358,
+    "on": "room_night",
+    "x": 1211,
+    "y": 436,
+    "note": "includes the bench under her: draw instead of props/bench + figure",
+    "source": "codex:inroom_mei_bench (painted into room_night on the bench, bench included), cut as the difference with a soft mask; no regrid"
+   },
+   "wei_reveal": {
+    "file": "seated/wei_reveal.png",
+    "width": 403,
+    "height": 498,
+    "on": "room_night",
+    "x": 696,
+    "y": 276,
+    "note": "same rect as seated/wei and props/stool_earth: swap",
+    "source": "codex:inroom2_wei_reveal (edit of the inroom2_wei painting: earth running from his fingers), raw difference"
+   }
+  },
+  "exam_layers": {
+   "slot_open": {
+    "file": "exam/slot_open.png",
+    "width": 418,
+    "height": 132,
+    "on": "exam_closed",
+    "x": 528,
+    "y": 10,
+    "source": "codex:exam_open (edit of exam_closed), rect cut"
+   },
+   "grille_open": {
+    "file": "exam/grille_open.png",
+    "width": 98,
+    "height": 82,
+    "on": "exam_closed",
+    "x": 798,
+    "y": 136,
+    "source": "codex:exam_open (edit of exam_closed), rect cut"
+   },
+   "arm_door_open": {
+    "file": "exam/arm_door_open.png",
+    "width": 458,
+    "height": 260,
+    "on": "exam_closed",
+    "x": 366,
+    "y": 576,
+    "source": "codex:exam_open (edit of exam_closed), rect cut"
+   },
+   "drawer_open": {
+    "file": "exam/drawer_open.png",
+    "width": 438,
+    "height": 281,
+    "on": "exam_closed",
+    "x": 884,
+    "y": 660,
+    "source": "codex:exam_open (edit of exam_closed), rect cut; cup from codex:exam_cup"
+   },
+   "grille_bars": {
+    "file": "exam/grille_bars.png",
+    "width": 80,
+    "height": 78,
+    "on": "exam_closed",
+    "x": 800,
+    "y": 136,
+    "window": [
+     808,
+     158,
+     873,
+     207
+    ],
+    "note": "draw over the tongue; tongues/*.grille small images sit in 'window'",
+    "source": "codex:exam_closed, the grille cut out, dark openings made transparent"
+   },
+   "mirror_clear": {
+    "file": "exam/mirror_clear.png",
+    "width": 99,
+    "height": 98,
+    "on": "exam_closed",
+    "x": 890,
+    "y": 141,
+    "source": "codex:exam_closed, rect cut"
+   },
+   "mirror_fog_strong": {
+    "file": "exam/mirror_fog_strong.png",
+    "width": 99,
+    "height": 98,
+    "on": "exam_closed",
+    "x": 890,
+    "y": 141,
+    "source": "codex:exam_fog (edit of exam_closed), rect cut"
+   },
+   "mirror_fog_weak": {
+    "file": "exam/mirror_fog_weak.png",
+    "width": 99,
+    "height": 98,
+    "on": "exam_closed",
+    "x": 890,
+    "y": 141,
+    "source": "codex:exam_fog blended into exam_closed (dithered), rect cut"
+   },
+   "our_hand": {
+    "file": "exam/our_hand.png",
+    "width": 254,
+    "height": 195,
+    "on": "exam_closed",
+    "x": 708,
+    "y": 746,
+    "note": "draw above the arm layer",
+    "source": "codex:our_hand_solo (our_hand redrawn alone on magenta, same frame), keyed"
+   },
+   "tongue_bars": {
+    "file": "exam/tongue_bars.png",
+    "width": 749,
+    "height": 792,
+    "on": "exam_tongue",
+    "x": 287,
+    "y": 71,
+    "note": "draw over tongues/*.close",
+    "source": "codex:exam_tongue: the grille's own three iron bars (rust and grain of the frame), cut from the painting"
+   },
+   "our_hand_close": {
+    "file": "exam/our_hand_close.png",
+    "width": 599,
+    "height": 424,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 601,
+    "y": 517,
+    "note": "draw above arms_close_of/* (and arms_close/*)",
+    "source": "codex:handc2_solo (the apprentice's hand from the lower right, as on the shutter, on the right-hand pose), keyed"
+   },
+   "earth_fall": {
+    "file": "exam/earth_fall.png",
+    "width": 214,
+    "height": 120,
+    "on": "exam_closed",
+    "x": 644,
+    "y": 812,
+    "note": "the reveal at the hatch; draw over the closed round door",
+    "source": "codex:exam_earth (a trickle and a heap of dry earth painted onto the round door's sill and pillow), raw difference"
+   }
+  },
+  "portraits": {
+   "zhou": {
+    "file": "portraits/zhou.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     194,
+     500,
+     266
+    ],
+    "source": "codex:portrait_zhou; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/zhou.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "gao": {
+    "file": "portraits/gao.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     142,
+     500,
+     214
+    ],
+    "source": "codex:portrait_gao; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/gao.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "lan": {
+    "file": "portraits/lan.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     188,
+     500,
+     260
+    ],
+    "source": "codex:portrait_lan; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/lan.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "lan_fever": {
+    "file": "portraits/lan_fever.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     188,
+     500,
+     260
+    ],
+    "source": "codex:portrait_lan_fever (edit of portrait_lan); graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/lan_fever.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "mei_sick": {
+    "file": "portraits/mei_sick.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     182,
+     500,
+     254
+    ],
+    "source": "codex:portrait_mei_sick; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/mei_sick.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "mei_edge": {
+    "file": "portraits/mei_edge.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     182,
+     500,
+     254
+    ],
+    "source": "codex:portrait_mei_edge (edit of portrait_mei_sick); graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/mei_edge.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "wei": {
+    "file": "portraits/wei.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     168,
+     500,
+     240
+    ],
+    "source": "codex:portrait_wei; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/wei.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "xu": {
+    "file": "portraits/xu.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     190,
+     500,
+     262
+    ],
+    "source": "codex:portrait_xu; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/xu.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "deng": {
+    "file": "portraits/deng.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     196,
+     500,
+     268
+    ],
+    "source": "codex:portrait_deng; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/deng.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "deng_tired": {
+    "file": "portraits/deng_tired.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     196,
+     500,
+     268
+    ],
+    "source": "codex:portrait_deng_tired (edit of portrait_deng); colour balanced to mei_edge / lan_grey (less yellow), lightness kept; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/deng_tired.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "feng": {
+    "file": "portraits/feng.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     183,
+     500,
+     255
+    ],
+    "source": "codex:portrait_feng; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/feng.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "feng_grey": {
+    "file": "portraits/feng_grey.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     183,
+     500,
+     255
+    ],
+    "source": "codex:portrait_feng_grey (edit of portrait_feng); graded to the other two grey faces, catchlight dimmed to mei_edge's; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/feng_grey.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "lan_grey": {
+    "file": "portraits/lan_grey.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     188,
+     500,
+     260
+    ],
+    "source": "codex:portrait_lan_grey (edit of portrait_lan); graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/lan_grey.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "qian": {
+    "file": "portraits/qian.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     182,
+     500,
+     254
+    ],
+    "source": "codex:portrait_qian; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/qian.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   },
+   "bai": {
+    "file": "portraits/bai.png",
+    "width": 640,
+    "height": 640,
+    "eyes": [
+     140,
+     184,
+     500,
+     256
+    ],
+    "source": "codex:portrait_bai; graded (1.0, 0.86)",
+    "slot": {
+     "file": "portraits/slot/bai.png",
+     "width": 182,
+     "height": 64,
+     "on": "exam_closed",
+     "x": 744,
+     "y": 58,
+     "source": "eye strip at the slot's size on a 3-px grid (the arms' pixel size), sharpened, ordered dither; draw this in the eye slot instead of scaling the portrait"
+    }
+   }
+  },
+  "tongues": {
+   "pale_white": {
+    "file": "tongues/pale_white.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongue_pale_white (single, matched to the sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/pale_white.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/pale_white.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_pale_white (tongue painted into the grille close-up, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "pale_swollen": {
+    "file": "tongues/pale_swollen.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongue_pale_swollen (single, matched to the sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/pale_swollen.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/pale_swollen.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_pale_swollen (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "red_thin_yellow": {
+    "file": "tongues/red_thin_yellow.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/red_thin_yellow.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/red_thin_yellow.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_red_thin_yellow (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "red_yellow": {
+    "file": "tongues/red_yellow.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/red_yellow.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/red_yellow.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_red_yellow (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "brown_stained": {
+    "file": "tongues/brown_stained.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/brown_stained.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/brown_stained.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_brown_stained (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "pink_even": {
+    "file": "tongues/pink_even.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/pink_even.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/pink_even.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_pink_even (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "grey_dry": {
+    "file": "tongues/grey_dry.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/grey_dry.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/grey_dry.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_grey_dry (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   },
+   "pale_bluish": {
+    "file": "tongues/pale_bluish.png",
+    "width": 366,
+    "height": 490,
+    "bg": "black",
+    "source": "codex:tongues (sheet); graded (0.9, 1.0)",
+    "grille": {
+     "file": "tongues/grille/pale_bluish.png",
+     "width": 65,
+     "height": 49,
+     "on": "exam_closed",
+     "x": 808,
+     "y": 158,
+     "source": "this tongue at grille size: box-downscaled, 2-px grid, ordered dither; draw grille_bars over it"
+    },
+    "close": {
+     "file": "tongues/close/pale_bluish.png",
+     "width": 640,
+     "height": 800,
+     "on": "exam_tongue",
+     "x": 301,
+     "y": 67,
+     "also_on": "room_tongue",
+     "source": "codex:tnobar_pale_bluish (tongue painted into the grille close-up, edit of tpaint_pale_white, then the bars removed by Codex), cut as the difference from the empty grille"
+    }
+   }
+  },
+  "silhouettes": {
+   "man": {
+    "file": "silhouettes/man.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   },
+   "woman": {
+    "file": "silhouettes/woman.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   },
+   "old_bent": {
+    "file": "silhouettes/old_bent.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   },
+   "tall_thin": {
+    "file": "silhouettes/tall_thin.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   },
+   "smooth": {
+    "file": "silhouettes/smooth.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   },
+   "stout": {
+    "file": "silhouettes/stout.png",
+    "width": 218,
+    "height": 203,
+    "on": "room_night",
+    "x": 640,
+    "y": 262,
+    "clip": "hatch_paper",
+    "blend": "normal",
+    "source": "codex:silhouettes (sheet): the shape as seen through the hatch paper - soft edge (blur 4), 66%% dark, grain at the edge; the paper's stains show through; draw as is, no extra blur"
+   }
+  },
+  "arms_close": {
+   "warm": {
+    "file": "arms_close/warm.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/xu_warm"
+   },
+   "sweaty": {
+    "file": "arms_close/sweaty.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/zhou_sweaty"
+   },
+   "old": {
+    "file": "arms_close/old.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/feng_old"
+   },
+   "wet": {
+    "file": "arms_close/wet.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/deng_wet"
+   },
+   "grey_blue": {
+    "file": "arms_close/grey_blue.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/deng_grey_blue"
+   },
+   "earth": {
+    "file": "arms_close/earth.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/wei_earth"
+   },
+   "porcelain": {
+    "file": "arms_close/porcelain.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "generic id kept until the game uses arms_close_of",
+    "source": "round 19: the right-hand pose of the shutter; stand-in = arms_close_of/bai_porcelain"
+   }
+  },
+  "arms_of": {
+   "zhou_sweaty": {
+    "file": "arms_of/zhou_sweaty.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_zhou_sweaty (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "gao_sweaty": {
+    "file": "arms_of/gao_sweaty.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_gao_sweaty (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "xu_warm": {
+    "file": "arms_of/xu_warm.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_xu_warm (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "lan_warm": {
+    "file": "arms_of/lan_warm.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_lan_warm (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "lan_grey_blue": {
+    "file": "arms_of/lan_grey_blue.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_lan_grey_blue (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open; grey matched across the four grey hands (per-channel gain)"
+   },
+   "mei_warm": {
+    "file": "arms_of/mei_warm.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_mei_warm (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "mei_grey_blue": {
+    "file": "arms_of/mei_grey_blue.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_mei_grey_blue (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open; grey matched across the four grey hands (per-channel gain)"
+   },
+   "deng_wet": {
+    "file": "arms_of/deng_wet.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_deng_wet (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "deng_grey_blue": {
+    "file": "arms_of/deng_grey_blue.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_deng_grey_blue (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open; grey matched across the four grey hands (per-channel gain)"
+   },
+   "feng_old": {
+    "file": "arms_of/feng_old.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_feng_old (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "feng_grey_blue": {
+    "file": "arms_of/feng_grey_blue.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_feng_grey_blue (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open; grey matched across the four grey hands (per-channel gain)"
+   },
+   "wei_earth": {
+    "file": "arms_of/wei_earth.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_wei_earth (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   },
+   "bai_porcelain": {
+    "file": "arms_of/bai_porcelain.png",
+    "width": 234,
+    "height": 298,
+    "on": "exam_closed",
+    "x": 553,
+    "y": 610,
+    "note": "draw over exam_layers/arm_door_open; our_hand goes on top",
+    "source": "codex:armof2_bai_porcelain (edit of armof2_base: refs/01's forearm proportion, this guest's right hand), raw difference against exam_open"
+   }
+  },
+  "arms_close_of": {
+   "zhou_sweaty": {
+    "file": "arms_close_of/zhou_sweaty.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_zhou_sweaty (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "gao_sweaty": {
+    "file": "arms_close_of/gao_sweaty.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_gao_sweaty (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "xu_warm": {
+    "file": "arms_close_of/xu_warm.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_xu_warm (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "lan_warm": {
+    "file": "arms_close_of/lan_warm.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_lan_warm (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "lan_grey_blue": {
+    "file": "arms_close_of/lan_grey_blue.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_lan_grey_blue (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up; grey matched across the four grey hands"
+   },
+   "mei_warm": {
+    "file": "arms_close_of/mei_warm.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_mei_warm (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "mei_grey_blue": {
+    "file": "arms_close_of/mei_grey_blue.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_mei_grey_blue (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up; grey matched across the four grey hands"
+   },
+   "deng_wet": {
+    "file": "arms_close_of/deng_wet.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_deng_wet (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "deng_grey_blue": {
+    "file": "arms_close_of/deng_grey_blue.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_deng_grey_blue (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up; grey matched across the four grey hands"
+   },
+   "feng_old": {
+    "file": "arms_close_of/feng_old.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_feng_old (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "feng_grey_blue": {
+    "file": "arms_close_of/feng_grey_blue.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_feng_grey_blue (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up; grey matched across the four grey hands"
+   },
+   "wei_earth": {
+    "file": "arms_close_of/wei_earth.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_wei_earth (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   },
+   "bai_porcelain": {
+    "file": "arms_close_of/bai_porcelain.png",
+    "width": 541,
+    "height": 642,
+    "on": "exam_pulse",
+    "also_on": "room_pulse",
+    "x": 378,
+    "y": 218,
+    "note": "all thirteen share this rect; our_hand_close goes on top",
+    "source": "codex:armcof_bai_porcelain (edit of armc2_base: the shutter's right-hand pose seen closer; this guest's hand), raw difference against the empty close-up"
+   }
+  }
+ }
+}
