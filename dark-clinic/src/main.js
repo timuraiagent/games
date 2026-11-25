@@ -21,6 +21,7 @@ import { morningScreen } from './ui/screens/morning.js';
 import { titleScreen, eveningScreen, endScreen } from './ui/screens/other.js';
 import { tongueScreen, pulseScreen } from './ui/screens/closeup.js';
 import { installDebug } from './ui/debug.js';
+import { Playtime } from './ui/playtime.js';
 
 const SCREENS = {
   title: titleScreen, evening: eveningScreen, room: roomScreen, exam: examScreen,
@@ -73,12 +74,19 @@ class Shell {
     this.pendingEvents = []; // события, которые новый экран ещё проиграет
     this.seenLines = new Set(); // строки, уже показанные игроку (доска показывает только их)
     this.memo = {};          // что показало событие, а вид не хранит (например, чем платят)
+    // минуты по ночам (вечер, ночь и утро ночи N — в счёт ночи N); обложка и конец демо — не в счёт
+    this.playtime = new Playtime(() => {
+      if (this.atTitle || !this.game) return null;
+      const v = this.game.view();
+      return ['evening', 'night', 'morning'].includes(v.phase) ? v.night : null;
+    });
   }
 
   sleep(ms) { return new Promise((r) => setTimeout(r, ms * this.speed)); }
 
   async boot() {
     installTextures();
+    this.playtime.install();
     this._muteButton();
     const unlock = () => this.audio.unlock();
     window.addEventListener('pointerdown', unlock, { capture: true });
@@ -346,6 +354,7 @@ class Shell {
       clearSave();
       rememberCloseup(null);
       this._rulesNew = {}; this._saveRulesNew();
+      this.playtime.reset();
       this.game = new Game(null, this.uiLang);
       this.atTitle = false; this.forced = null; this.memo = {};
       key = 'new_game';

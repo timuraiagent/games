@@ -164,6 +164,7 @@ export function endScreen(shell) {
       const half = Math.ceil(rows.length / 2);
       const left = h('div', { class: 'roll-page left' }, h('h1', { text: e.title }), h('div', { class: 'roll' }, ...rows.slice(0, half).flatMap(row)));
       const right = h('div', { class: 'roll-page right' }, h('div', { class: 'roll' }, ...rows.slice(half).flatMap(row)),
+        playtimeLine(shell),
         again ? h('button', { class: 'plain-btn roll-again', 'data-act': 'new_game', onclick: (ev) => { ev.stopPropagation(); shell.perform('new_game'); } }, again.label) : null);
       const card = h('div', { class: `end-card on-book${book ? '' : ' no-book'}`, 'data-act': 'end-card' }, left, right);
       const askNew = () => {
@@ -240,6 +241,15 @@ function rollRows(e) {
     return [...rows, ...extra];
   }
   return (e.lines || []).map((l) => ({ name: '', fate: String(l), cause: '' }));
+}
+
+/** Под перечнем судеб — сколько минут шла каждая ночь и всего (счёт интерфейса; без хранилища — ничего). */
+function playtimeLine(shell) {
+  const s = shell.playtime?.summary();
+  if (!s) return null;
+  const parts = [...s.nights.map((x) => t('end.time.night', { N: x.n, MIN: x.min })), t('end.time.total', { MIN: s.total })];
+  return h('div', { class: 'roll-time', 'data-act': 'end.playtime' },
+    ...parts.flatMap((p, i) => [i ? h('span', { class: 'sep', text: ' · ' }) : null, h('span', { class: 'part', text: p })]));
 }
 
 /** Подпись у «Продолжить», если сохранённая игра на другом языке, чем выбран на обложке. */

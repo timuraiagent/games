@@ -106,6 +106,8 @@ export function installDebug(shell) {
     /** Есть ли картинка в манифесте (для проверок замены). */
     hasAsset(key) { return shell.assets.has(key); },
     candle(on = true) { const r = shell.game.debugCandle(on); shell.scenes.update(shell.view(), []); return r; },
+    /** Счёт минут по ночам: мс по ночам (досчитано до сейчас) и то, что покажет последняя карточка. */
+    playtime() { const s = shell.playtime.summary(); return { nights: { ...shell.playtime.nights }, ok: shell.playtime.ok, summary: s }; },
     busy() { return shell.busy; },
     ready() { return !!shell.ready; },
     freeze(on = true) { shell.flicker.frozen = !!on; return shell.flicker.frozen; },

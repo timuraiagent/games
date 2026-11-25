@@ -69,6 +69,8 @@ export default {
   'lang.self': 'Русский',
   'end.confirm': 'Начать сначала? Эти три ночи сотрутся.',
   'end.confirm.no': 'Оставить',
+  'end.time.night': 'Ночь {N} — {MIN} мин',
+  'end.time.total': 'Всего {MIN} мин',
   'evening.tray.vial': 'Склянка и записка',
   'evening.tray.key': 'Ключ и записка',
   'evening.tray.note': 'Записка Лю',

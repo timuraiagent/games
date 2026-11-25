@@ -69,6 +69,8 @@ export default {
   'lang.self': 'English',
   'end.confirm': 'Start over? These three nights will be wiped away.',
   'end.confirm.no': 'Keep them',
+  'end.time.night': 'Night {N} — {MIN} min',
+  'end.time.total': 'Total {MIN} min',
   'evening.tray.vial': 'Vial and note',
   'evening.tray.key': 'Key and note',
   'evening.tray.note': "Liu's note",

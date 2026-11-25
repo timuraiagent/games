@@ -713,3 +713,8 @@ button:focus-visible { outline: 1px dotted var(--bone-faint); outline-offset: 3p
 
 /* подсказка «выше — ещё приметы» не налезает на первую строку (в маленьком окне шрифт крупнее) */
 .board .more-up { height: auto !important; min-height: 20px; line-height: 1.2 !important; padding-bottom: 2px; }
+
+/* ── Последняя карточка: минуты по ночам под перечнем — обычным шрифтом, как тексты, по которым решают ── */
+.end-card .roll-time { margin-top: 16px; padding-top: 8px; border-top: 1px solid rgba(28,19,12,.3); font: 400 22px/1.35 var(--serif); color: #1c130c; }
+.end-card .roll-time .part { white-space: nowrap; }
+#stage.tight .end-card .roll-time { font-size: 23px !important; }
