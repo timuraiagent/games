@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ru">
+<!--
+  ОБОЛОЧКА ПРОТОТИПА (pipeline-game, этап 4). Об игре страница ничего не знает: всё берёт из rules.js и levels.js,
+  которые лежат рядом. Править этот файл под игру не нужно; если игре не хватает оболочки — это повод упростить
+  игру, а не дописывать страницу. Что умеет: рисует view(), ловит касания, показывает правило при первом
+  появлении механики, отмена хода и «заново», журнал плейтеста, хук window.GAME для проверки в браузере.
+  Адрес: ?level=3 — открыть уровень, ?all=1 — открыть все уровни, ?off=id1,id2 — выключить механики на всех уровнях.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Прототип</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { --bg: #f6f1e7; --ink: #2f2a25; --soft: #6f665c; --card: #fffaf0; --line: #d9cfbf; --cell: #efe6d4;
+          --wall: #7c8f6a; --go: #fff3c4; --ring: #c98a1b; --warn: #f6d2c2; --good: #d9ecd2; --accent: #3f6b57; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 14px 16px 40px; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  h2 { font-size: 19px; margin: 0 0 2px; }
+  p { margin: 0; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  #levels { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 2px; }
+  #levels button { flex: 0 0 36px; height: 36px; padding: 0; border-radius: 18px; border: 1px solid var(--line); background: var(--card); }
+  #levels button.cur { border: 2px solid var(--accent); font-weight: 700; }
+  #levels button.won { background: var(--good); }
+  #levels button:disabled { opacity: .4; cursor: default; }
+  #card, #newrule, #rulesbox, #end { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; }
+  #hint { color: var(--soft); }
+  #newrule { border-color: var(--ring); }
+  #newrule b, #rulesbox b { display: block; }
+  #rulesbox p + p { margin-top: 8px; }
+  #hud { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  #hud span { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 4px 10px; }
+  #hud span.t-warn { background: var(--warn); }
+  #hud span.t-good { background: var(--good); }
+  #board { position: relative; width: 100%; margin: 0 auto; background: var(--cell); border-radius: 12px; overflow: hidden; user-select: none; -webkit-user-select: none; }
+  #board svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }   /* линии — поверх цветных клеток */
+  #board line { stroke: var(--soft); stroke-width: .07; stroke-linecap: round; }
+  #board line.t-warn { stroke: #c0563a; } #board line.t-good { stroke: var(--accent); } #board line.t-dim { stroke: var(--line); }
+  .it { position: absolute; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0; border: 0;
+        background: none; font-size: 1em; line-height: 1; pointer-events: none; }
+  .it.tap { pointer-events: auto; cursor: pointer; }
+  .it .g { font-size: .62em; }
+  .it .lb { position: absolute; right: 8%; bottom: 6%; font-size: .26em; font-weight: 700; background: #fff; border-radius: 1em; padding: .1em .45em; border: 1px solid var(--line); }
+  .it.corner .g { position: absolute; left: 5%; top: 5%; font-size: .3em; }
+  .it.t-wall { background: var(--wall); }
+  .it.t-go { background: var(--go); box-shadow: inset 0 0 0 2px var(--ring); }
+  .it.t-warn { background: var(--warn); }
+  .it.t-good { background: var(--good); }
+  .it.t-dim { opacity: .45; }
+  .it.sel { box-shadow: inset 0 0 0 4px var(--accent); }
+  .it.tap:active { filter: brightness(.93); }
+  #events { min-height: 1.45em; margin: 8px 2px; color: var(--accent); }
+  #moves, #controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  #moves button, #controls button, #end button, #host button { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 9px 14px; }
+  #end { margin-top: 10px; }
+  #end.win { background: var(--good); } #end.lose { background: var(--warn); }
+  #end button { margin: 8px 8px 0 0; }
+  #end button.main { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #host { margin-top: 28px; color: var(--soft); font-size: 15px; }
+  #host > div { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  #host input { font: inherit; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; width: 13em; }
+  #host textarea { width: 100%; height: 7em; font: 12px/1.3 ui-monospace, monospace; }
+  #question { margin-top: 18px; color: var(--soft); font-size: 14px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="name"></h1>
+  <nav id="levels" aria-label="Уровни"></nav>
+  <section id="card"><h2 id="title"></h2><p id="hint"></p></section>
+  <section id="newrule" hidden></section>
+  <div id="hud"></div>
+  <div id="board"></div>
+  <div id="moves"></div>
+  <p id="events" aria-live="polite"></p>
+  <section id="end" hidden></section>
+  <div id="controls">
+    <button id="undo">Отменить ход</button>
+    <button id="restart">Начать заново</button>
+    <button id="rules">Правила</button>
+  </div>
+  <section id="rulesbox" hidden></section>
+  <details id="host">
+    <summary>Для ведущего теста</summary>
+    <div><label>Тестер: <input id="tester" placeholder="номер: Т1, Т2…" autocomplete="off"></label></div>
+    <div><button id="copy">Скопировать журнал</button><button id="unlock">Открыть все уровни</button><button id="wipe">Стереть журнал</button><span id="hostmsg"></span></div>
+    <textarea id="dump" hidden readonly></textarea>
+  </details>
+  <p id="question"></p>
+</main>
+<script src="levels.js"></script>
+<script src="rules.js"></script>
+<script>
+(function () {
+  'use strict';
+  const R = window.RULES, LV = R.levels, OTHERS = R.MECHANICS.slice(1).map(m => m.id);
+  const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const q = new URLSearchParams(location.search), FORCED = (q.get('off') || '').split(',').filter(Boolean);
+  const nameOf = m => String(R.moveName(m)), mech = id => R.MECHANICS.find(m => m.id === id);
+  const KEY = 'pipeline-game:' + R.NAME;
+  const store = { get() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } },
+                  set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* журнал останется в памяти страницы */ } } };
+  const blank = () => ({ game: R.NAME, started: new Date().toISOString(), tester: '', off: FORCED, levels: {}, trace: [] });
+  let J = store.get() || blank();
+  let li = 0, S = null, hist = [], sel = null, stamp = Date.now(), openAll = q.has('all'), wipeArmed = false;
+
+  // --- журнал плейтеста: по каждому уровню время до первой победы, ходы, отмены, рестарты, провалы, подсказки
+  const rec = () => (J.levels[LV[li].id] = J.levels[LV[li].id] || { opened: 0, won: false, ms_to_first_win: 0, moves_to_first_win: 0, moves: 0, undos: 0, restarts: 0, fails: 0, rules_opened: 0, best_moves: null });
+  function note(kind, detail) {
+    const now = Date.now(), r = rec();
+    if (!r.won) r.ms_to_first_win += now - stamp;                        // время уровня идёт, пока он открыт и ещё не пройден
+    stamp = now;
+    if (J.trace.length < 3000) J.trace.push([Math.round((now - Date.parse(J.started)) / 1000), LV[li].id, kind].concat(detail === undefined ? [] : [detail]));
+    store.set(J);
+  }
+
+  // --- уровень: на нём включены ядро и механики из uses; ?off выключает ещё
+  const offOf = lv => OTHERS.filter(m => !lv.uses.includes(m) || FORCED.includes(m));
+  const firstUse = i => LV[i].uses.filter(m => !LV.slice(0, i).some(l => l.uses.includes(m)));
+  const unlocked = i => openAll || i === 0 || LV.slice(0, i).every(l => (J.levels[l.id] || {}).won);
+  function open(i) {
+    if (i < 0 || i >= LV.length) return false;
+    if (S) note('leave');
+    li = i; S = R.init(LV[li], offOf(LV[li])); hist = []; sel = null; stamp = Date.now();
+    rec().opened += 1; note('open'); $('rulesbox').hidden = true; draw(); return true;
+  }
+  function act(move, direct) {                                           // direct — ход из view; иначе ход ищется по имени
+    if (R.over(S)) return false;
+    const m = !direct && typeof move === 'string' ? R.legal(S).find(x => nameOf(x) === move) : move;
+    if (m === undefined) return false;
+    hist.push(S); S = R.apply(S, m); sel = null;
+    const r = rec(); r.moves += 1; if (!r.won) r.moves_to_first_win += 1;
+    note('move', nameOf(m));
+    if (R.won(S)) { note('win', hist.length); r.won = true; r.best_moves = r.best_moves === null ? hist.length : Math.min(r.best_moves, hist.length); store.set(J); }
+    else if (R.over(S)) { r.fails += 1; note('fail'); }
+    draw(); return true;
+  }
+  function undo() { if (!hist.length || R.won(S)) return false; S = hist.pop(); sel = null; rec().undos += 1; note('undo'); draw(); return true; }
+  function restart() { S = R.init(LV[li], offOf(LV[li])); hist = []; sel = null; rec().restarts += 1; note('restart'); draw(); return true; }
+  function tap(it) {
+    if (it.move !== undefined) return act(it.move, true);
+    if (it.select !== undefined) { sel = sel === it.select ? null : it.select; draw(); return true; }
+    return false;
+  }
+
+  // --- картинка
+  function draw() {
+    const lv = LV[li], v = R.view(S, sel), ended = R.over(S), won = R.won(S), board = $('board');
+    $('levels').innerHTML = LV.map((l, i) => `<button data-i="${i}" class="${i === li ? 'cur ' : ''}${(J.levels[l.id] || {}).won ? 'won' : ''}" ${unlocked(i) ? '' : 'disabled'} aria-label="Уровень ${i + 1}">${i + 1}</button>`).join('');
+    const cur = $('levels').children[li];                                // длинная полоса уровней: текущий — в середину
+    $('levels').scrollLeft = cur.offsetLeft - $('levels').offsetLeft - ($('levels').clientWidth - cur.offsetWidth) / 2;
+    $('title').textContent = `${li + 1}. ${lv.title}`; $('hint').textContent = lv.hint;
+    const fresh = (li === 0 ? [R.MECHANICS[0].id] : []).concat(firstUse(li)).filter(m => !FORCED.includes(m));
+    $('newrule').hidden = !fresh.length;
+    $('newrule').innerHTML = fresh.map(m => `<b>${li === 0 && m === R.MECHANICS[0].id ? 'Правило' : 'Новое правило'}: ${esc(mech(m).name)}</b>${esc(mech(m).rule)}`).join('<br>');
+    $('hud').innerHTML = (v.hud || []).map(h => `<span class="${h.tone ? 't-' + esc(h.tone) : ''}">${esc(h.label)}: <b>${esc(h.value)}</b></span>`).join('');
+    board.style.aspectRatio = `${v.w} / ${v.h}`;
+    board.style.maxWidth = Math.round(window.innerHeight * 0.55 * v.w / v.h) + 'px';     // высокое поле не выше половины экрана
+    board.style.fontSize = (board.clientWidth / v.w) + 'px';
+    board.innerHTML = (v.lines || []).length ? `<svg viewBox="0 0 ${v.w} ${v.h}" preserveAspectRatio="none">` +
+      v.lines.map(l => `<line x1="${l.x1 + .5}" y1="${l.y1 + .5}" x2="${l.x2 + .5}" y2="${l.y2 + .5}" class="${l.tone ? 't-' + esc(l.tone) : ''}"${l.dash ? ' stroke-dasharray=".15 .15"' : ''}/>`).join('') + '</svg>' : '';
+    for (const it of v.items) {
+      const can = !ended && (it.move !== undefined || it.select !== undefined), el = document.createElement(can ? 'button' : 'div');
+      el.className = 'it' + (it.tone ? ' t-' + it.tone : '') + (can ? ' tap' : '') + (it.corner ? ' corner' : '') + (it.select !== undefined && it.select === sel ? ' sel' : '');
+      el.style.cssText = `left:${it.x / v.w * 100}%;top:${it.y / v.h * 100}%;width:${(it.w || 1) / v.w * 100}%;height:${(it.h || 1) / v.h * 100}%`;
+      el.innerHTML = `<span class="g">${esc(it.glyph === undefined ? '' : it.glyph)}</span>` + (it.label === undefined ? '' : `<span class="lb">${esc(it.label)}</span>`);
+      if (can) { el.setAttribute('aria-label', it.move !== undefined ? nameOf(it.move) : 'выбрать'); el.addEventListener('click', () => tap(it));
+        if (it.move !== undefined) el.dataset.move = nameOf(it.move); else el.dataset.select = String(it.select); }
+      board.appendChild(el);
+    }
+    $('moves').innerHTML = '';                                           // ходы вне поля (например, «ждать»)
+    for (const b of (ended ? [] : v.buttons || [])) { const el = document.createElement('button'); el.textContent = b.label; el.dataset.move = nameOf(b.move); el.addEventListener('click', () => act(b.move, true)); $('moves').appendChild(el); }
+    $('events').textContent = (S.events || []).join(' ');
+    const end = $('end'); end.hidden = !ended; end.className = won ? 'win' : 'lose';
+    if (won) end.innerHTML = `<b>Уровень пройден за ${hist.length} ${hist.length % 10 === 1 && hist.length % 100 !== 11 ? 'ход' : 'ходов'}.</b><br>` +
+      (li + 1 < LV.length ? '<button class="main" data-do="next">Дальше</button>' : 'Это был последний уровень. Спасибо, что сыграли!<br>') + '<button data-do="restart">Сыграть уровень ещё раз</button>';
+    else if (ended) end.innerHTML = `<b>${esc(R.why(S))}</b><br><button class="main" data-do="undo">Отменить ход</button><button data-do="restart">Начать заново</button>`;
+    $('undo').disabled = !hist.length || won;
+  }
+
+  // --- кнопки и клавиши
+  $('levels').addEventListener('click', e => { const b = e.target.closest('button'); if (b && !b.disabled) open(+b.dataset.i); });
+  $('end').addEventListener('click', e => { const d = (e.target.closest('button') || {}).dataset; if (!d) return;
+    if (d.do === 'next') open(li + 1); if (d.do === 'undo') undo(); if (d.do === 'restart') restart(); });
+  $('undo').addEventListener('click', undo); $('restart').addEventListener('click', restart);
+  $('rules').addEventListener('click', () => { const box = $('rulesbox'); box.hidden = !box.hidden;
+    if (!box.hidden) { rec().rules_opened += 1; note('rules');
+      box.innerHTML = [R.MECHANICS[0].id].concat(LV[li].uses).filter(m => !FORCED.includes(m)).map(m => `<p><b>${esc(mech(m).name)}</b>${esc(mech(m).rule)}</p>`).join(''); } });
+  $('tester').value = J.tester; $('tester').addEventListener('input', e => { J.tester = e.target.value; store.set(J); });
+  $('copy').addEventListener('click', () => { note('copy'); const text = JSON.stringify(J), dump = $('dump'); dump.value = text; dump.hidden = false; dump.select();
+    const done = ok => { $('hostmsg').textContent = ok ? 'Журнал скопирован.' : 'Скопируйте журнал из поля ниже.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), () => done(false)); else done(false); });
+  $('unlock').addEventListener('click', () => { openAll = true; draw(); });
+  $('wipe').addEventListener('click', () => { if (!wipeArmed) { wipeArmed = true; $('hostmsg').textContent = 'Нажмите ещё раз — журнал и пройденные уровни сотрутся.'; return; }
+    wipeArmed = false; J = blank(); store.set(J); $('tester').value = ''; $('dump').hidden = true; $('hostmsg').textContent = 'Журнал стёрт.'; S = null; open(0); });
+  const KEYS = { ArrowUp: 'вверх', ArrowDown: 'вниз', ArrowLeft: 'влево', ArrowRight: 'вправо' };
+  document.addEventListener('keydown', e => { if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey) return;
+    if (KEYS[e.key] && act(KEYS[e.key])) e.preventDefault(); else if (e.key === 'z' || e.key === 'я') undo(); else if (e.key === 'r' || e.key === 'к') restart(); });
+  window.addEventListener('resize', draw);
+
+  // --- хук для проверки в браузере (этап 4): боты играют через ту же страницу, что и человек
+  window.GAME = {
+    rules: R, level: () => li, state: () => S, view: () => R.view(S, sel), names: () => R.legal(S).map(nameOf), journal: () => J,
+    open, act, undo, restart,
+    tap(x, y) { const v = R.view(S, sel), it = v.items.filter(i => i.x === x && i.y === y && (i.move !== undefined || i.select !== undefined)).pop(); return it ? tap(it) : false; },
+    play(i, names) { openAll = true; open(i); for (const n of names) if (!act(n)) break; return { won: R.won(S), over: R.over(S), moves: hist.length }; },
+  };
+
+  document.title = `${R.NAME} — ${R.QUESTION}`;
+  $('name').textContent = R.NAME;
+  $('question').textContent = 'Вопрос прототипа: ' + R.QUESTION + (FORCED.length ? ' · Выключено: ' + FORCED.map(m => (mech(m) || { name: m }).name).join(', ') : '');
+  const want = +q.get('level') - 1;
+  open(want >= 0 && want < LV.length && unlocked(want) ? want : Math.max(0, LV.findIndex((l, i) => unlocked(i) && !(J.levels[l.id] || {}).won)));
+})();
+</script>
+</body>
+</html>
